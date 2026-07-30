@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- KODE CSP YANG DIPERBAIKI (MENGIZINKAN FIREBASE DATABASE) -->
+    <!-- KODE CSP -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.firebasedatabase.app https://apis.google.com; connect-src 'self' https://*.firebaseio.com https://*.firebasedatabase.app https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline';">
     
     <title>BLIST ME - blistme.com</title>
@@ -937,7 +937,7 @@
         const hashedPassword = await hashPassword(passwordInput);
 
         if (authMode === 'signup') {
-            userRef.get().then(async (snapshot) => {
+            userRef.once('value').then(async (snapshot) => {
                 if (snapshot.exists()) {
                     bukaModalPesan('Gagal', 'Username sudah terdaftar!');
                 } else {
@@ -959,7 +959,7 @@
                 bukaModalPesan('Error', 'Gagal terhubung ke database: ' + err.message);
             });
         } else {
-            userRef.get().then(async (snapshot) => {
+            userRef.once('value').then(async (snapshot) => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     if (userData.password === hashedPassword) {
