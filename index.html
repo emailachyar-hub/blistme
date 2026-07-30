@@ -741,8 +741,8 @@
     }
 
     function confirmSaveTitle() {
-        const inputJudul = document.getElementById('appTitleInput');
-        currentJudul = inputJudul.value;
+    const inputJudul = document.getElementById('appTitleInput');
+    currentJudul = sanitizeHTML(inputJudul.value.trim());
         simpanKeDatabase();
         
         const btnSave = document.getElementById('btnSaveTitle');
@@ -1040,9 +1040,9 @@
     }
 
     function simpanEdit() {
-        if (selectedEditIndex === null) return;
-        const input = document.getElementById('inputItem');
-        const teks = input.value.trim();
+    if (selectedEditIndex === null) return;
+    const input = document.getElementById('inputItem');
+    const teks = sanitizeHTML(input.value.trim());
         
         if (teks !== '') {
             dataList[selectedEditIndex].text = teks;
