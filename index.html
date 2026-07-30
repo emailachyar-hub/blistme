@@ -51,39 +51,41 @@
             margin-bottom: 8px;
         }
 
-        /* Icon BLIST & Title Inline Edit */
+        /* Icon BLIST Keren & Perbesar */
         .brand {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex: 1;
         }
         .logo-bl {
-            height: 36px;
-            padding: 0 10px;
-            background: var(--primary);
+            height: 42px;
+            padding: 0 14px;
+            background: linear-gradient(135deg, #1e7a53 0%, #114b33 100%);
             color: white;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 13px;
-            letter-spacing: 0.5px;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 15px;
+            letter-spacing: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 6px rgba(30, 122, 83, 0.3);
+            box-shadow: 0 4px 12px rgba(30, 122, 83, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             flex-shrink: 0;
         }
         
-        /* Input Judul */
+        /* Input Judul Utama (Perbesar) */
         .brand-title-input {
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
             color: var(--text);
             border: 1.5px solid transparent;
             background: transparent;
             outline: none;
             width: 100%;
-            padding: 4px 8px;
+            padding: 4px 6px;
             border-radius: 8px;
             transition: all 0.3s ease;
         }
@@ -167,7 +169,7 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 8px;
-            min-height: 0; /* Menstabilkan scroll pada mobile */
+            min-height: 0;
         }
 
         .list-area {
@@ -181,13 +183,16 @@
         }
         
         ul { list-style: none; }
+        
+        /* Daftar Nama Diperbesar */
         li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 14px;
+            padding: 15px 16px; /* Perbesar Padding */
             border-bottom: 1px solid var(--border);
-            font-size: 15px;
+            font-size: 18px; /* Perbesar Font Nama */
+            font-weight: 500;
             cursor: pointer;
             user-select: none;
             transition: background-color 0.15s ease;
@@ -196,13 +201,13 @@
         li:active { background-color: #f3f4f6; }
         li.selected-item {
             background-color: #e6f4ea;
-            font-weight: 600;
+            font-weight: 700;
         }
         
         .item-text { flex: 1; word-break: break-word; }
-        .item-owner { font-size: 11px; color: #9ca3af; margin-left: 6px; }
+        .item-owner { font-size: 12px; color: #9ca3af; margin-left: 8px; font-weight: 400; }
 
-        /* Tombol Share Floating (Akan disembunyikan jika belum login) */
+        /* Tombol Share Floating */
         .btn-share-floating {
             position: absolute;
             bottom: 12px;
@@ -210,12 +215,12 @@
             background: var(--wa-color);
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 9px 16px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
-            display: none; /* Default tersembunyi */
+            display: none;
             align-items: center;
             gap: 6px;
             box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
@@ -224,31 +229,32 @@
         }
         .btn-share-floating:active { transform: scale(0.92); }
 
-        .stats { font-size: 12px; color: #6b7280; margin-bottom: 10px; font-weight: 500; flex-shrink: 0; }
+        .stats { font-size: 13px; color: #6b7280; margin-bottom: 10px; font-weight: 600; flex-shrink: 0; }
 
-        /* Area Input Nama */
+        /* Area Input Nama Diperbesar */
         .input-section { flex-shrink: 0; }
-        .input-group { margin-bottom: 8px; }
+        .input-group { margin-bottom: 10px; }
         .input-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
+            padding: 15px 16px; /* Kolom Input Lebih Luas */
+            border: 2px solid var(--border);
             border-radius: var(--radius);
-            font-size: 15px;
+            font-size: 17px; /* Font Ketik Nama Lebih Besar */
+            font-weight: 500;
             outline: none;
             transition: border-color 0.15s;
         }
         .input-group input:focus { border-color: var(--primary); }
 
-        /* Style Tombol Aksi */
+        /* Tombol Tambahkan Diperbesar */
         .action-buttons { display: flex; gap: 8px; }
         .btn-touch {
             flex: 1;
-            padding: 12px;
-            min-height: 44px;
+            padding: 15px;
+            min-height: 52px; /* Tombol Lebih Tinggi & Jelas */
             border-radius: var(--radius);
-            font-weight: 600;
-            font-size: 14px;
+            font-weight: 700;
+            font-size: 16px; /* Font Tombol Lebih Besar */
             border: none;
             cursor: pointer;
             display: flex;
@@ -393,7 +399,6 @@
         <div class="list-area" id="listArea">
             <ul id="daftarList"></ul>
         </div>
-        <!-- Tombol Share Floating Kanan Bawah (Tampil hanya jika sudah Sign In / Sign Up) -->
         <button class="btn-share-floating" id="btnShareFloating" onclick="shareDaftarTeks()" title="Bagikan Teks Daftar">
             📤 Share Daftar
         </button>
@@ -479,7 +484,7 @@
 
     function getActiveUser() { return currentUser || guestId; }
 
-    // Sync Realtime
+    // Realtime Sync
     function initRealtimeSync() {
         const listRef = db.ref('lists/' + currentListId);
         listRef.on('value', (snapshot) => {
@@ -495,7 +500,7 @@
             renderList();
             if (currentUser) simpanKeRiwayatLokal();
         }, (err) => {
-            console.warn("Gagal membaca database realtime:", err);
+            console.warn("Gagal membaca database:", err);
         });
     }
 
@@ -509,14 +514,13 @@
         if (currentUser) simpanKeRiwayatLokal();
     }
 
-    // Simpan ke riwayat lokal hanya jika sudah login
     function simpanKeRiwayatLokal() {
         if (!currentUser) return;
         let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
         const idx = history.findIndex(h => h.id === currentListId);
         const itemRiwayat = {
             id: currentListId,
-            judul: currentJudul || 'ME',
+            judul: (currentJudul === 'ketik judul disini...' || !currentJudul) ? 'ME' : currentJudul,
             itemCount: dataList.length,
             time: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
         };
@@ -533,17 +537,35 @@
     renderAuthBar();
     renderInputActions();
 
-    /* --- RENDER AUTH & AKSES TAMPILAN SESUAI STATUS LOGIN --- */
+    /* --- RENDER JUDUL (PERBAIKAN TAMPILAN TAMU MEMBUKA LINK) --- */
+    function renderJudul() {
+        const inputJudul = document.getElementById('appTitleInput');
+        if (currentUser) {
+            inputJudul.readOnly = false;
+            if (currentJudul === 'ketik judul disini...' || currentJudul === 'ME') {
+                inputJudul.classList.add('pulse-anim');
+            }
+        } else {
+            inputJudul.readOnly = true;
+            inputJudul.classList.remove('pulse-anim');
+        }
+
+        if (document.activeElement !== inputJudul && !isAnimatingTitle) {
+            // JIKA TAMU Membuka Link & Judul masih "ketik judul disini...", tampilkan "ME"
+            if (!currentUser && (currentJudul === 'ketik judul disini...' || !currentJudul || !currentJudul.trim())) {
+                inputJudul.value = 'ME';
+            } else {
+                inputJudul.value = currentJudul;
+            }
+        }
+    }
+
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
         const shareBar = document.getElementById('shareBar');
         const btnShareFloating = document.getElementById('btnShareFloating');
 
         if (currentUser) {
-            // HANYA JIKA SUDAH SIGN IN / SIGN UP:
-            // 1. Tampilkan tombol "Riwayat"
-            // 2. Tampilkan "Salin Link" di Header
-            // 3. Tampilkan tombol Floating "Share Daftar"
             authBar.innerHTML = `
                 <button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">📜 Riwayat</button>
                 <span class="user-badge">${currentUser}</span>
@@ -552,8 +574,6 @@
             shareBar.style.display = 'block';
             if (btnShareFloating) btnShareFloating.style.display = 'flex';
         } else {
-            // UNTUK TAMU (HOME TANPA SIGN IN/SIGN UP):
-            // Sembunyikan Tombol Riwayat dan Tombol Share
             authBar.innerHTML = `
                 <button class="btn-auth btn-sign-in" onclick="openAuthModal('signin')">Sign In</button>
             `;
@@ -563,7 +583,6 @@
         renderJudul();
     }
 
-    /* --- FUNGSI SHARE TEKS DAFTAR --- */
     function shareDaftarTeks() {
         if (!currentUser) return;
         if (dataList.length === 0) {
@@ -571,7 +590,8 @@
             return;
         }
 
-        let teksRangkuman = `📌 *${currentJudul.toUpperCase()}*\n`;
+        const judulFix = (currentJudul === 'ketik judul disini...' || !currentJudul) ? 'ME' : currentJudul;
+        let teksRangkuman = `📌 *${judulFix.toUpperCase()}*\n`;
         dataList.forEach((item, index) => {
             teksRangkuman += `${index + 1}. ${item.text}\n`;
         });
@@ -579,7 +599,7 @@
 
         if (navigator.share) {
             navigator.share({
-                title: currentJudul,
+                title: judulFix,
                 text: teksRangkuman
             }).catch(() => {});
         } else if (navigator.clipboard) {
@@ -593,7 +613,6 @@
         }
     }
 
-    /* --- MODAL RIWAYAT HISTORIS --- */
     function bukaModalRiwayat() {
         if (!currentUser) return;
         document.getElementById('authTabs').style.display = 'none';
@@ -646,7 +665,6 @@
         bukaModalRiwayat();
     }
 
-    /* --- ANIMASI TYPEWRITER --- */
     function playTitleTypewriterAnimation() {
         if (isAnimatingTitle) return;
         isAnimatingTitle = true;
@@ -696,7 +714,6 @@
         }
     }
 
-    /* --- AUTHENTICATION --- */
     function openAuthModal(mode) {
         authMode = mode;
         document.getElementById('authTabs').style.display = 'flex';
@@ -817,23 +834,6 @@
         }
     }
 
-    function renderJudul() {
-        const inputJudul = document.getElementById('appTitleInput');
-        if (currentUser) {
-            inputJudul.readOnly = false;
-            if (currentJudul === 'ketik judul disini...' || currentJudul === 'ME') {
-                inputJudul.classList.add('pulse-anim');
-            }
-        } else {
-            inputJudul.readOnly = true;
-            inputJudul.classList.remove('pulse-anim');
-        }
-
-        if (document.activeElement !== inputJudul && !isAnimatingTitle) {
-            inputJudul.value = currentJudul;
-        }
-    }
-
     function updateJudulUtama() {
         if (!currentUser) return;
         const inputJudul = document.getElementById('appTitleInput');
@@ -842,7 +842,6 @@
         simpanKeDatabase();
     }
 
-    /* --- DAFTAR NAMA & INPUT --- */
     function renderList() {
         const ul = document.getElementById('daftarList');
         ul.innerHTML = '';
@@ -944,7 +943,6 @@
         }
     }
 
-    /* --- MODAL DIALOG --- */
     function bukaModalCustom({ judul, kataTombol = 'Ya', onConfirm }) {
         document.getElementById('authTabs').style.display = 'none';
         const modal = document.getElementById('customModal');
