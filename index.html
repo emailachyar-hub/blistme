@@ -59,10 +59,10 @@
             width: 100%;
         }
 
-        /* LOGO UTAMA SELALU "BLIST ME" */
+        /* LOGO UTAMA FIX HANYA "BLIST" */
         .logo-bl {
             height: 44px;
-            padding: 0 16px;
+            padding: 0 14px;
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             border-radius: 12px;
@@ -78,7 +78,7 @@
             flex-shrink: 0;
         }
         
-        /* Input Judul Daftar Baru/Edit */
+        /* Input Judul Daftar + Placeholder Memudar */
         .brand-title-input {
             font-size: 18px;
             font-weight: 800;
@@ -91,6 +91,14 @@
             border-radius: 8px;
             transition: all 0.3s ease;
         }
+        
+        /* Style Placeholder agar transparan/memudar tapi tetap kelihatan saat diketik */
+        .brand-title-input::placeholder {
+            color: rgba(15, 23, 42, 0.35);
+            font-weight: 600;
+            font-style: italic;
+        }
+
         .brand-title-input:read-only {
             cursor: default;
             border-color: transparent !important;
@@ -98,17 +106,18 @@
             box-shadow: none !important;
         }
 
-        /* Animasi Pulse Input Judul */
-        .brand-title-input.pulse-anim {
-            animation: glowPulse 1.8s infinite ease-in-out;
+        /* Animasi Kerlap-kerlip (Blink/Glow) pada ME */
+        .me-blink-anim {
+            animation: blinkGlow 0.8s infinite alternate ease-in-out;
+            color: var(--primary) !important;
+            font-weight: 900;
         }
-        @keyframes glowPulse {
-            0% { border-color: rgba(15, 118, 110, 0.2); box-shadow: 0 0 0 rgba(15, 118, 110, 0); }
-            50% { border-color: var(--primary); box-shadow: 0 0 10px rgba(15, 118, 110, 0.3); }
-            100% { border-color: rgba(15, 118, 110, 0.2); box-shadow: 0 0 0 rgba(15, 118, 110, 0); }
+        @keyframes blinkGlow {
+            0% { opacity: 0.3; text-shadow: 0 0 2px rgba(15, 118, 110, 0.2); }
+            100% { opacity: 1; text-shadow: 0 0 12px rgba(15, 118, 110, 0.8); }
         }
 
-        /* Sub-Bar User & Navigasi */
+        /* Sub-Bar User & Navigasi Header */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
@@ -149,7 +158,7 @@
             justify-content: flex-end;
         }
         .btn-auth {
-            padding: 6px 8px;
+            padding: 6px 10px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 600;
@@ -209,13 +218,13 @@
         .item-text { flex: 1; word-break: break-word; }
         .item-owner { font-size: 11px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
-        /* UI BAR SALIN LINK & SHARE DAFTAR CANTIK (FLOATING BOTTOM BAR) */
+        /* FLOATING BOTTOM BAR (SALIN LINK & SHARE WHATSAPP) */
         .share-floating-bar {
             position: absolute;
             bottom: 10px;
             left: 10px;
             right: 10px;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(8px);
             border: 1px solid var(--primary-border);
             padding: 6px;
@@ -229,9 +238,9 @@
         .btn-share-action {
             flex: 1;
             border: none;
-            padding: 9px 12px;
+            padding: 9px 10px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -282,15 +291,15 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* MODAL POP-UP (RESPONSIF UP & AMAN AUTOFILL BROWSER) */
+        /* POP-UP MODAL ERGONOMIS BAWAH LAYAR (JANGKAUAN JARI) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding-top: 10vh;
+            align-items: flex-end; /* Pindah ke bawah agar dekat dengan jempol */
+            padding-bottom: 24px;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
@@ -303,11 +312,11 @@
         .modal-card {
             background: var(--surface);
             width: 100%;
-            max-width: 340px;
+            max-width: 420px;
             padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-            transform: translateY(-20px);
+            border-radius: 20px;
+            box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
+            transform: translateY(30px);
             transition: transform 0.2s ease;
             max-height: 80vh;
             display: flex;
@@ -352,9 +361,9 @@
         .modal-actions { display: flex; gap: 8px; }
         .modal-btn {
             flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
             font-size: 14px;
             border: none;
             cursor: pointer;
@@ -390,16 +399,17 @@
 
 <div class="app-container">
     <header>
-        <!-- Baris 1: Logo Tetap BLIST ME & Input Judul Daftar -->
+        <!-- Baris 1: Logo Pas "BLIST" + Input Judul "ME" / Placeholder -->
         <div class="brand-row">
-            <div class="logo-bl">BLIST ME</div>
-            <input type="text" id="appTitleInput" class="brand-title-input" value="ME" 
+            <div class="logo-bl">BLIST</div>
+            <input type="text" id="appTitleInput" class="brand-title-input" 
+                   placeholder="ketik judul disini..."
                    oninput="updateJudulUtama()" 
                    onclick="handleTitleClick()" 
                    onfocus="handleTitleClick()">
         </div>
 
-        <!-- Baris 2: Menu Header (Buat Baru | Riwayat | Hapus | Logout) -->
+        <!-- Baris 2: Menu Header -->
         <div class="user-catchy-bar" id="authBar"></div>
     </header>
 
@@ -409,13 +419,13 @@
             <ul id="daftarList"></ul>
         </div>
 
-        <!-- UI Salin Link & Share Daftar Cantik (Tampil Saat Sign In) -->
+        <!-- Floating Action Bar: Salin Link & Share Direct WhatsApp -->
         <div class="share-floating-bar" id="shareFloatingBar" style="display: none;">
             <button class="btn-share-action btn-copy-url" onclick="copyListLink()">
                 Salin Link Daftar
             </button>
-            <button class="btn-share-action btn-share-wa" onclick="shareDaftarTeks()">
-                Share Daftar
+            <button class="btn-share-action btn-share-wa" onclick="shareDirectWhatsApp()">
+                Share WhatsApp
             </button>
         </div>
     </div>
@@ -424,7 +434,7 @@
         Total: <strong id="totalItem">0</strong> nama
     </div>
 
-    <!-- Area Input Nama (Selalu Direset Kosong) -->
+    <!-- Area Input Nama -->
     <div class="input-section" id="inputSection">
         <div class="input-group">
             <input type="text" id="inputItem" placeholder="Ketik nama di sini..." onkeypress="handleEnter(event)" onfocus="autoScrollForKeyboard()" autocomplete="off">
@@ -433,7 +443,7 @@
     </div>
 </div>
 
-<!-- MODAL POP-UP -->
+<!-- POP-UP MODAL (BAWAH LAYAR / DESAIN ERGONOMIS) -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -450,7 +460,7 @@
     </div>
 </div>
 
-<!-- FIREBASE SDK COMPAT -->
+<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
@@ -470,7 +480,7 @@
             firebase.initializeApp(firebaseConfig);
         }
     } catch(e) {
-        console.error("Gagal menginisialisasi Firebase:", e);
+        console.error("Gagal Firebase:", e);
     }
     
     const db = firebase.database();
@@ -493,7 +503,7 @@
 
     let currentListId = getEffectiveListId();
     let dataList = [];
-    let currentJudul = 'ME';
+    let currentJudul = '';
     let selectedEditIndex = null;
     let authMode = 'signin';
     let isAnimatingTitle = false;
@@ -511,19 +521,14 @@
         currentRefListener = listRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                if (!listFromUrl) {
-                    currentJudul = (currentUser && data.judul && data.judul !== 'ketik judul disini...') ? data.judul : 'ME';
-                } else {
-                    currentJudul = data.judul || 'ME';
-                }
+                currentJudul = data.judul || '';
                 dataList = data.items || [];
             } else {
-                currentJudul = 'ME';
+                currentJudul = '';
                 dataList = [];
             }
             renderJudul();
             renderList();
-            // Hanya simpan ke riwayat jika ada minimal 1 item
             if (currentUser && dataList.length > 0) simpanKeRiwayatLokal();
         });
     }
@@ -535,7 +540,6 @@
             items: dataList,
             updatedAt: new Date().toISOString()
         });
-        // Syarat: Jangan simpan ke riwayat lokal jika daftar masih 0 item
         if (currentUser && dataList.length > 0) {
             simpanKeRiwayatLokal();
         }
@@ -547,7 +551,7 @@
         const idx = history.findIndex(h => h.id === currentListId);
         const itemRiwayat = {
             id: currentListId,
-            judul: (currentJudul === 'ketik judul disini...' || !currentJudul) ? 'ME' : currentJudul,
+            judul: currentJudul.trim() || 'ME',
             itemCount: dataList.length,
             time: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
         };
@@ -560,9 +564,11 @@
         localStorage.setItem('blistme_history', JSON.stringify(history));
     }
 
-    // Selalu hapus inputan daftar saat halaman dimuat/refresh
+    // Selalu hapus inputan dan bersihkan state saat refresh
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('inputItem').value = '';
+        dataList = [];
+        renderList();
     });
 
     initRealtimeSync();
@@ -573,24 +579,15 @@
         const inputJudul = document.getElementById('appTitleInput');
         if (currentUser) {
             inputJudul.readOnly = false;
-            if (currentJudul === 'ketik judul disini...' || currentJudul === 'ME') {
-                inputJudul.classList.add('pulse-anim');
-            }
         } else {
             inputJudul.readOnly = true;
-            inputJudul.classList.remove('pulse-anim');
         }
 
         if (document.activeElement !== inputJudul && !isAnimatingTitle) {
-            if (!listFromUrl && (!currentUser || currentJudul === 'ketik judul disini...' || !currentJudul || !currentJudul.trim())) {
-                inputJudul.value = 'ME';
-            } else {
-                inputJudul.value = currentJudul;
-            }
+            inputJudul.value = currentJudul;
         }
     }
 
-    /* RENDER HEADER ACTIONS (Hapus Icon +, Tambah Tombol Hapus) */
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
         const shareFloatingBar = document.getElementById('shareFloatingBar');
@@ -623,71 +620,87 @@
         renderJudul();
     }
 
-    /* AKSI BUAT BARU DENGAN ANIMASI ME */
+    /* AKSI BUAT BARU DENGAN ANIMASI ME KERLAP KERLIP */
     function buatLinkDaftarBaru() {
         if (!currentUser) return;
         const newSlug = Math.random().toString(36).substring(2, 7);
-        // Ubah URL tanpa reload berat
         window.history.pushState({}, '', window.location.pathname + '?list=' + newSlug);
         currentListId = newSlug;
         dataList = [];
-        currentJudul = 'ME';
+        currentJudul = '';
         renderList();
         
-        // Reset inputan
         document.getElementById('inputItem').value = '';
-        
-        // Triger Animasi Pengetikan "ME"
-        playTitleTypewriterAnimation();
+        playLongBlinkMeAnimation();
     }
 
-    /* HAPUS DAFTAR SECARA LANGSUNG DARI HEADER */
+    /* ANIMASI "ME" BERTAHAN LAMA DENGAN KERLAP KERLIP */
+    function playLongBlinkMeAnimation() {
+        if (isAnimatingTitle) return;
+        isAnimatingTitle = true;
+
+        const inputJudul = document.getElementById('appTitleInput');
+        inputJudul.value = "ME";
+        inputJudul.classList.add('me-blink-anim');
+
+        // Bertahan kerlap-kerlip selama 2.8 detik
+        setTimeout(() => {
+            inputJudul.classList.remove('me-blink-anim');
+            let textToDelete = "ME";
+
+            let deleteInterval = setInterval(() => {
+                if (textToDelete.length > 0) {
+                    textToDelete = textToDelete.slice(0, -1);
+                    inputJudul.value = textToDelete;
+                } else {
+                    clearInterval(deleteInterval);
+                    inputJudul.value = "";
+                    currentJudul = "";
+                    isAnimatingTitle = false;
+                }
+            }, 100);
+        }, 2800);
+    }
+
     function hapusDaftarAktif() {
         if (!currentUser) return;
         bukaModalCustom({
             judul: 'Hapus daftar ini?',
             kataTombol: 'Hapus',
             onConfirm: () => {
-                // Hapus dari Database & LocalStorage
                 db.ref('lists/' + currentListId).remove();
 
                 let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
                 history = history.filter(h => h.id !== currentListId);
                 localStorage.setItem('blistme_history', JSON.stringify(history));
 
-                // Buka halaman baru yang bersih
                 window.location.href = window.location.pathname;
             }
         });
     }
 
-    function shareDaftarTeks() {
+    /* SHARE DIRECT KE WHATSAPP */
+    function shareDirectWhatsApp() {
         if (!currentUser) return;
         if (dataList.length === 0) {
-            bukaModalPesan('Daftar Kosong', 'Belum ada nama yang terinput di dalam daftar.');
+            bukaModalPesan('Daftar Kosong', 'Belum ada nama yang terinput dalam daftar.');
             return;
         }
 
-        const judulFix = (currentJudul === 'ketik judul disini...' || !currentJudul) ? 'ME' : currentJudul;
-        let teksRangkuman = `*${judulFix.toUpperCase()}*\n\n`;
-        dataList.forEach((item, index) => {
-            teksRangkuman += `${index + 1}. ${item.text}\n`;
-        });
-        teksRangkuman += `\nVia blistme.com`;
+        const judulFix = currentJudul.trim() || 'ME';
+        const baseUrl = window.location.origin + window.location.pathname;
+        const actualShareUrl = `${baseUrl}?list=${currentListId}`;
 
-        if (navigator.share) {
-            navigator.share({
-                title: judulFix,
-                text: teksRangkuman
-            }).catch(() => {});
-        } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(teksRangkuman).then(() => {
-                bukaModalPesan('Daftar Disalin', 'Teks daftar berhasil disalin ke clipboard.');
-            });
-        }
+        let teksWA = `*${judulFix.toUpperCase()}*\n\n`;
+        dataList.forEach((item, index) => {
+            teksWA += `${index + 1}. ${item.text}\n`;
+        });
+        teksWA += `\nBuka link daftar: ${actualShareUrl}`;
+
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(teksWA)}`;
+        window.open(waUrl, '_blank');
     }
 
-    /* MODAL RIWAYAT (AMAN DARI PROMPT AUTOFILL BROWSER) */
     function bukaModalRiwayat() {
         if (!currentUser) return;
         document.getElementById('authTabs').style.display = 'none';
@@ -731,7 +744,7 @@
     function hapusRiwayat(event, listId) {
         event.stopPropagation();
         bukaModalCustom({
-            judul: 'Hapus daftar ini dari riwayat?',
+            judul: 'Hapus daftar dari riwayat?',
             kataTombol: 'Hapus',
             onConfirm: () => {
                 db.ref('lists/' + listId).remove();
@@ -755,51 +768,12 @@
         }, 300);
     }
 
-    /* ANIMASI TYPEWRITER "ME" */
-    function playTitleTypewriterAnimation() {
-        if (isAnimatingTitle) return;
-        isAnimatingTitle = true;
-
-        const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.classList.remove('pulse-anim');
-
-        let textToDelete = inputJudul.value || "ME";
-        let textToType = "ketik judul disini...";
-
-        let deleteInterval = setInterval(() => {
-            if (textToDelete.length > 0) {
-                textToDelete = textToDelete.slice(0, -1);
-                inputJudul.value = textToDelete;
-            } else {
-                clearInterval(deleteInterval);
-                let charIndex = 0;
-                let typeInterval = setInterval(() => {
-                    if (charIndex <= textToType.length) {
-                        inputJudul.value = textToType.slice(0, charIndex);
-                        charIndex++;
-                    } else {
-                        clearInterval(typeInterval);
-                        isAnimatingTitle = false;
-                        currentJudul = textToType;
-
-                        if (currentUser) {
-                            inputJudul.classList.add('pulse-anim');
-                        }
-                    }
-                }, 60);
-            }
-        }, 80);
-    }
-
     function handleTitleClick() {
         if (!currentUser) return;
         const inputJudul = document.getElementById('appTitleInput');
-        const currentVal = inputJudul.value.trim().toLowerCase();
-        
-        if (currentVal === 'ketik judul disini...' || currentVal === 'me') {
+        if (inputJudul.value === 'ME') {
             inputJudul.value = '';
             currentJudul = '';
-            inputJudul.classList.remove('pulse-anim');
         }
     }
 
@@ -822,8 +796,8 @@
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
         modalBody.innerHTML = `
-            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA">
-            <input type="password" id="authPassword" class="modal-input" placeholder="Password">
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="off">
         `;
 
         document.getElementById('modalBtnCancel').style.display = 'block';
@@ -848,7 +822,7 @@
         if (authMode === 'signup') {
             userRef.get().then((snapshot) => {
                 if (snapshot.exists()) {
-                    bukaModalPesan('Gagal', 'Username/Nomor ini sudah terdaftar!');
+                    bukaModalPesan('Gagal', 'Username sudah terdaftar!');
                 } else {
                     userRef.set({
                         username: usernameInput,
@@ -857,11 +831,12 @@
                     }).then(() => {
                         currentUser = usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
+                        dataList = [];
                         currentListId = getEffectiveListId();
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', 'Akun berhasil dibuat!');
-                        setTimeout(playTitleTypewriterAnimation, 300);
+                        setTimeout(playLongBlinkMeAnimation, 400);
                     });
                 }
             });
@@ -872,11 +847,12 @@
                     if (userData.password === passwordInput) {
                         currentUser = userData.username || usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
+                        dataList = [];
                         currentListId = getEffectiveListId();
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', `Selamat datang, ${currentUser}!`);
-                        setTimeout(playTitleTypewriterAnimation, 300);
+                        setTimeout(playLongBlinkMeAnimation, 400);
                     } else {
                         bukaModalPesan('Gagal', 'Password salah!');
                     }
@@ -891,6 +867,7 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         document.getElementById('inputItem').value = '';
+        dataList = [];
         batalEdit();
         window.location.href = window.location.pathname;
     }
@@ -909,17 +886,16 @@
 
         if (navigator.clipboard) {
             navigator.clipboard.writeText(actualShareUrl).then(() => {
-                bukaModalPesan('Link Daftar Disalin', '');
+                bukaModalPesan('Link Disalin', 'Link daftar berhasil disalin.');
             });
         } else {
-            bukaModalPesan('Link Daftar Disalin', actualShareUrl);
+            bukaModalPesan('Link Disalin', actualShareUrl);
         }
     }
 
     function updateJudulUtama() {
         if (!currentUser) return;
         const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.classList.remove('pulse-anim');
         currentJudul = inputJudul.value;
         if (dataList.length > 0) simpanKeDatabase();
     }
