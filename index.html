@@ -35,6 +35,7 @@
             height: 100%;
             padding: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: relative;
         }
 
         /* Header Layout */
@@ -70,7 +71,7 @@
             flex-shrink: 0;
         }
         
-        /* Input Judul / Tampilan ME */
+        /* Input Judul */
         .brand-title-input {
             font-size: 17px;
             font-weight: 700;
@@ -90,7 +91,7 @@
             box-shadow: none !important;
         }
 
-        /* Animasi Kotak Kedap-Kedip (Glow Pulse) */
+        /* Animasi Kotak Kedap-Kedip */
         .brand-title-input.pulse-anim {
             animation: glowPulse 1.8s infinite ease-in-out;
         }
@@ -100,7 +101,7 @@
             100% { border-color: rgba(30, 122, 83, 0.2); box-shadow: 0 0 0 rgba(30, 122, 83, 0); }
         }
 
-        /* Auth Bar Header */
+        /* Auth & Menu Bar Header */
         .auth-bar {
             display: flex;
             align-items: center;
@@ -114,13 +115,13 @@
             background: #e6f4ea;
             padding: 6px 10px;
             border-radius: 20px;
-            max-width: 110px;
+            max-width: 90px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .btn-auth {
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
@@ -128,10 +129,11 @@
             border: 1px solid var(--border);
             transition: background 0.15s;
         }
+        .btn-history-menu { background: #f3f4f6; color: #374151; }
         .btn-sign-in { background: var(--primary); color: white; border: none; }
         .btn-logout { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
 
-        /* Tombol Salin Link */
+        /* Tombol Salin Link Header */
         .share-bar {
             margin-bottom: 8px;
             display: none;
@@ -151,18 +153,26 @@
             justify-content: center;
             gap: 6px;
             box-shadow: 0 3px 10px rgba(30, 122, 83, 0.25);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: transform 0.15s ease;
         }
         .btn-copy-link:active { transform: scale(0.98); }
 
-        /* Area Daftar Nama */
+        /* Area Daftar Nama & Container Relatif */
+        .list-area-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
         .list-area {
             flex: 1;
             overflow-y: auto;
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            margin-bottom: 8px;
             background: #ffffff;
+            padding-bottom: 50px; /* Space agar tidak tertutup tombol share floating */
         }
         
         ul { list-style: none; }
@@ -187,6 +197,28 @@
         .item-text { flex: 1; word-break: break-word; }
         .item-owner { font-size: 11px; color: #9ca3af; margin-left: 6px; }
 
+        /* Tombol Share Floating Kanan Bawah Area Daftar */
+        .btn-share-floating {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: var(--wa-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+            transition: transform 0.15s ease, background-color 0.15s;
+            z-index: 10;
+        }
+        .btn-share-floating:active { transform: scale(0.92); }
+
         .stats { font-size: 12px; color: #6b7280; margin-bottom: 10px; font-weight: 500; }
 
         /* Area Input Nama */
@@ -203,10 +235,7 @@
         .input-group input:focus { border-color: var(--primary); }
 
         /* Style Tombol Aksi */
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
+        .action-buttons { display: flex; gap: 8px; }
         .btn-touch {
             flex: 1;
             padding: 12px;
@@ -227,7 +256,7 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e5e7eb; color: #374151; }
 
-        /* Modal Custom Pop-In */
+        /* Modal Pop-In & Riwayat */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -245,16 +274,18 @@
         .modal-card {
             background: var(--surface);
             width: 100%;
-            max-width: 320px;
+            max-width: 340px;
             padding: 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             transform: scale(0.9);
             transition: transform 0.2s ease;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
         }
         .modal-overlay.active .modal-card { transform: scale(1); }
         
-        /* Modal Tabs untuk Sign In / Sign Up */
         .auth-tabs {
             display: flex;
             background: #f1f5f9;
@@ -279,7 +310,7 @@
         }
 
         .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text); text-align: center; }
-        .modal-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+        .modal-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; overflow-y: auto; }
         .modal-input {
             width: 100%;
             padding: 10px 12px;
@@ -301,6 +332,32 @@
         }
         .btn-cancel-modal { background: #f3f4f6; color: #4b5563; }
         .btn-confirm { background: var(--primary); color: white; }
+
+        /* Item Historis Riwayat */
+        .history-list { display: flex; flex-direction: column; gap: 8px; }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fafafa;
+        }
+        .history-info { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .history-title { font-size: 13px; font-weight: 700; color: var(--text); }
+        .history-meta { font-size: 11px; color: #6b7280; }
+        .history-btns { display: flex; gap: 4px; }
+        .btn-hist-act {
+            padding: 6px 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-hist-load { background: #e6f4ea; color: var(--primary); }
+        .btn-hist-del { background: #fee2e2; color: #dc2626; }
     </style>
 </head>
 <body>
@@ -310,7 +367,6 @@
         <div class="header-top">
             <div class="brand">
                 <div class="logo-bl">BLIST</div>
-                <!-- Input judul langsung (Klik untuk hapus otomatis saat bernilai default) -->
                 <input type="text" id="appTitleInput" class="brand-title-input" value="ME" 
                        oninput="updateJudulUtama()" 
                        onclick="handleTitleClick()" 
@@ -319,7 +375,6 @@
             <div class="auth-bar" id="authBar"></div>
         </div>
 
-        <!-- Tombol Salin Link (Hanya Tampil Saat Login) -->
         <div class="share-bar" id="shareBar">
             <button class="btn-copy-link" onclick="copyListLink()">
                 📋 Salin Link Daftar
@@ -327,9 +382,14 @@
         </div>
     </header>
 
-    <!-- Area Daftar Nama -->
-    <div class="list-area" id="listArea">
-        <ul id="daftarList"></ul>
+    <!-- Area Daftar Nama & Tombol Share Floating Kanan Bawah -->
+    <div class="list-area-wrapper">
+        <div class="list-area" id="listArea">
+            <ul id="daftarList"></ul>
+        </div>
+        <button class="btn-share-floating" onclick="shareDaftarTeks()" title="Bagikan Teks Daftar">
+            📤 Share Daftar
+        </button>
     </div>
 
     <div class="stats">
@@ -367,7 +427,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
-    // Konfigurasi Firebase Realtime Database
     const firebaseConfig = {
         apiKey: "AIzaSyCqQV_VUK371FozYTXKtkMQ4kFks5iiclE",
         authDomain: "blistme-a9097.firebaseapp.com",
@@ -383,19 +442,15 @@
     }
     const db = firebase.database();
 
-    // System Guest ID & Session User
     let guestId = localStorage.getItem('buatlist_guestId') || ('Tamu-' + Math.floor(1000 + Math.random() * 9000));
     localStorage.setItem('buatlist_guestId', guestId);
 
     const urlParams = new URLSearchParams(window.location.search);
     let currentUser = localStorage.getItem('buatlist_currentUser') || null;
 
-    // FUNGSI ISOLASI DATA
     function getEffectiveListId() {
         const listFromUrl = urlParams.get('list');
-        if (listFromUrl) {
-            return listFromUrl;
-        }
+        if (listFromUrl) return listFromUrl;
         if (currentUser) {
             const userKey = currentUser.toLowerCase().replace(/[^a-z0-9]/g, '_');
             return 'user_home_' + userKey;
@@ -412,7 +467,7 @@
 
     function getActiveUser() { return currentUser || guestId; }
 
-    // Realtime Database Listener
+    // Realtime Sync & Histori Management
     function initRealtimeSync() {
         const listRef = db.ref('lists/' + currentListId);
         listRef.on('value', (snapshot) => {
@@ -426,6 +481,7 @@
             }
             renderJudul();
             renderList();
+            simpanKeRiwayatLokal();
         });
     }
 
@@ -436,33 +492,126 @@
             items: dataList,
             updatedAt: new Date().toISOString()
         });
+        simpanKeRiwayatLokal();
     }
 
-    // Inisialisasi Aplikasi
+    // SIMPAN KE HISTORI LOKAL
+    function simpanKeRiwayatLokal() {
+        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+        const idx = history.findIndex(h => h.id === currentListId);
+        const itemRiwayat = {
+            id: currentListId,
+            judul: currentJudul || 'ME',
+            itemCount: dataList.length,
+            time: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+        };
+
+        if (idx > -1) {
+            history[idx] = itemRiwayat;
+        } else {
+            history.unshift(itemRiwayat);
+        }
+        localStorage.setItem('blistme_history', JSON.stringify(history));
+    }
+
     initRealtimeSync();
     renderAuthBar();
     renderInputActions();
 
-    /* --- ANIMASI TYPEWRITER & EFFEK KEDAP-KEDIP JUDUL --- */
+    /* --- SHARE DAFTAR TERINPUT (FLOATING BOTTOM RIGHT) --- */
+    function shareDaftarTeks() {
+        if (dataList.length === 0) {
+            bukaModalPesan('Daftar Kosong', 'Belum ada nama yang terinput di dalam daftar.');
+            return;
+        }
+
+        let teksRangkuman = `📌 *${currentJudul.toUpperCase()}*\n`;
+        dataList.forEach((item, index) => {
+            teksRangkuman += `${index + 1}. ${item.text}\n`;
+        });
+        teksRangkuman += `\nDibuat via BLIST ME`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: currentJudul,
+                text: teksRangkuman
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(teksRangkuman).then(() => {
+                bukaModalPesan('Daftar Disalin!', 'Teks daftar berhasil disalin ke clipboard.');
+            });
+        }
+    }
+
+    /* --- MENU RIWAYAT HISTORIS --- */
+    function bukaModalRiwayat() {
+        document.getElementById('authTabs').style.display = 'none';
+        const modal = document.getElementById('customModal');
+        document.getElementById('modalTitle').innerText = '📜 Riwayat Tersimpan';
+        
+        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+        const bodyEl = document.getElementById('modalBody');
+
+        if (history.length === 0) {
+            bodyEl.innerHTML = `<p style="text-align:center; font-size:13px; color:#6b7280;">Belum ada riwayat tersimpan.</p>`;
+        } else {
+            let html = '<div class="history-list">';
+            history.forEach(item => {
+                html += `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <span class="history-title">${item.judul}</span>
+                            <span class="history-meta">${item.itemCount} nama • ${item.time}</span>
+                        </div>
+                        <div class="history-btns">
+                            <button class="btn-hist-act btn-hist-load" onclick="muatRiwayat('${item.id}')">Buka/Edit</button>
+                            <button class="btn-hist-act btn-hist-del" onclick="hapusRiwayat('${item.id}')">Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            bodyEl.innerHTML = html;
+        }
+
+        document.getElementById('modalBtnCancel').style.display = 'none';
+        const btnConfirm = document.getElementById('modalBtnConfirm');
+        btnConfirm.innerText = 'Tutup';
+        btnConfirm.onclick = tutupModal;
+
+        modal.classList.add('active');
+    }
+
+    function muatRiwayat(listId) {
+        currentListId = listId;
+        initRealtimeSync();
+        tutupModal();
+    }
+
+    function hapusRiwayat(listId) {
+        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+        history = history.filter(h => h.id !== listId);
+        localStorage.setItem('blistme_history', JSON.stringify(history));
+        bukaModalRiwayat();
+    }
+
+    /* --- ANIMASI TYPEWRITER --- */
     function playTitleTypewriterAnimation() {
         if (isAnimatingTitle) return;
         isAnimatingTitle = true;
 
         const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.classList.remove('pulse-anim'); // Stop glow saat animasi mengetik
+        inputJudul.classList.remove('pulse-anim');
 
         let textToDelete = inputJudul.value || "ME";
         let textToType = "ketik judul disini...";
 
-        // Phase 1: Menghapus huruf satu per satu (Backspace)
         let deleteInterval = setInterval(() => {
             if (textToDelete.length > 0) {
                 textToDelete = textToDelete.slice(0, -1);
                 inputJudul.value = textToDelete;
             } else {
                 clearInterval(deleteInterval);
-                
-                // Phase 2: Mengetik huruf satu per satu (Typewriter)
                 let charIndex = 0;
                 let typeInterval = setInterval(() => {
                     if (charIndex <= textToType.length) {
@@ -474,44 +623,43 @@
                         currentJudul = textToType;
                         simpanKeDatabase();
 
-                        // Nyalakan kembali efek kotak kedap-kedip / glow
                         if (currentUser) {
                             inputJudul.classList.add('pulse-anim');
                         }
                     }
-                }, 70); // Kecepatan ketik
+                }, 70);
             }
-        }, 90); // Kecepatan hapus
+        }, 90);
     }
 
-    /* --- HANDLE KLIK JUDUL (LANGSUNG HAPUS TEKS "ketik judul disini...") --- */
     function handleTitleClick() {
         if (!currentUser) return;
-        
         const inputJudul = document.getElementById('appTitleInput');
         const currentVal = inputJudul.value.trim().toLowerCase();
         
         if (currentVal === 'ketik judul disini...' || currentVal === 'me') {
             inputJudul.value = '';
             currentJudul = '';
-            inputJudul.classList.remove('pulse-anim'); // Matikan kedap-kedip saat diedit
+            inputJudul.classList.remove('pulse-anim');
             simpanKeDatabase();
         }
     }
 
-    /* --- AUTHENTICATION (SIGN IN & SIGN UP) --- */
+    /* --- AUTHENTICATION --- */
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
         const shareBar = document.getElementById('shareBar');
 
+        let htmlMenu = `<button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">📜 Riwayat</button>`;
+
         if (currentUser) {
-            authBar.innerHTML = `
+            authBar.innerHTML = htmlMenu + `
                 <span class="user-badge">${currentUser}</span>
                 <button class="btn-auth btn-logout" onclick="logout()">Logout</button>
             `;
             shareBar.style.display = 'block';
         } else {
-            authBar.innerHTML = `
+            authBar.innerHTML = htmlMenu + `
                 <button class="btn-auth btn-sign-in" onclick="openAuthModal('signin')">Sign In</button>
             `;
             shareBar.style.display = 'none';
@@ -574,14 +722,10 @@
                     }).then(() => {
                         currentUser = usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
-                        
-                        // Switch ke space akun terisolasi
                         currentListId = getEffectiveListId();
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', 'Akun berhasil dibuat!');
-
-                        // Trigger animasi judul setiap berhasil Sign Up
                         setTimeout(playTitleTypewriterAnimation, 300);
                     });
                 }
@@ -593,14 +737,10 @@
                     if (userData.password === passwordInput) {
                         currentUser = userData.username || usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
-                        
-                        // Switch ke space akun terisolasi
                         currentListId = getEffectiveListId();
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', `Selamat datang, ${currentUser}!`);
-
-                        // Trigger animasi judul setiap berhasil Sign In
                         setTimeout(playTitleTypewriterAnimation, 300);
                     } else {
                         bukaModalPesan('Gagal', 'Password salah!');
@@ -616,13 +756,11 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         batalEdit();
-        
         currentListId = getEffectiveListId();
         initRealtimeSync();
         renderAuthBar();
     }
 
-    /* --- SALIN LINK DAFTAR UNIK --- */
     function copyListLink() {
         if (!urlParams.get('list')) {
             const randomSlug = Math.random().toString(36).substring(2, 7);
@@ -641,13 +779,10 @@
         });
     }
 
-    /* --- EDIT JUDUL HEADER --- */
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
-        
         if (currentUser) {
             inputJudul.readOnly = false;
-            // Nyalakan efek glowing jika judul berupa default/petunjuk
             if (currentJudul === 'ketik judul disini...' || currentJudul === 'ME') {
                 inputJudul.classList.add('pulse-anim');
             }
@@ -663,9 +798,8 @@
 
     function updateJudulUtama() {
         if (!currentUser) return;
-
         const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.classList.remove('pulse-anim'); // Hapus kedap-kedip saat dimulainya pengetikan manual
+        inputJudul.classList.remove('pulse-anim');
         currentJudul = inputJudul.value;
         simpanKeDatabase();
     }
