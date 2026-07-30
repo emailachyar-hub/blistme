@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <!-- TAMBAHKAN KODE CSP INI -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline';">
+    
     <title>BLIST ME - blistme.com</title>
     <style>
+      /* ... kode CSS lainnya ... */
         :root {
             --primary: #0f766e;        
             --primary-hover: #115e59;
@@ -964,13 +969,14 @@
     }
 
     function logout() {
-        currentUser = null;
-        localStorage.removeItem('buatlist_currentUser');
-        document.getElementById('inputItem').value = '';
-        dataList = [];
-        batalEdit();
-        window.location.href = window.location.pathname;
-    }
+    currentUser = null;
+    localStorage.removeItem('buatlist_currentUser');
+    localStorage.removeItem('buatlist_guestId'); // TAMBAHKAN BARIS INI
+    document.getElementById('inputItem').value = '';
+    dataList = [];
+    batalEdit();
+    window.location.href = window.location.pathname;
+}
 
     function renderList() {
         const ul = document.getElementById('daftarList');
@@ -1021,9 +1027,8 @@
     }
 
     function tambahItem() {
-        const input = document.getElementById('inputItem');
-        const teks = input.value.trim();
-
+    const input = document.getElementById('inputItem');
+    const teks = sanitizeHTML(input.value.trim()); // Di-sanitasi di sini
         if (teks !== '') {
             dataList.push({ text: teks, owner: getActiveUser() });
             input.value = '';
@@ -1110,6 +1115,11 @@
     function tutupModal() {
         document.getElementById('customModal').classList.remove('active');
     }
+    function sanitizeHTML(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}
 </script>
 
 </body>
