@@ -79,46 +79,35 @@
         }
         .logo-bl:active { transform: scale(0.95); }
         
-        /* Title & Save Button Wrapper */
-        .title-wrapper {
-            display: inline-flex;
+        /* Title & Save Button Container */
+        .title-container {
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: #f8fafc;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            padding: 2px 8px;
-            transition: all 0.2s ease;
-            width: auto;
-            max-width: 100%;
-        }
-        .title-wrapper.expanded {
-            display: flex;
             flex: 1;
-            width: 100%;
-        }
-        .title-wrapper:focus-within {
-            border-color: var(--primary);
-            background: #ffffff;
-            width: 100%;
-            flex: 1;
+            min-width: 0;
         }
 
+        /* Input Judul dengan Background yang Pas di Huruf ME Saja */
         .brand-title-input {
             font-size: 16px;
             font-weight: 700;
             color: var(--text);
-            border: none;
-            background: transparent;
+            border: 1.5px solid var(--border);
+            background: #f8fafc;
+            border-radius: 10px;
             outline: none;
-            width: 45px; /* Default pas ukuran "ME" */
-            padding: 4px;
-            transition: width 0.2s ease;
+            padding: 6px 10px;
+            width: 50px; /* Pas ukuran "ME" */
+            transition: all 0.2s ease;
         }
-        .title-wrapper.expanded .brand-title-input,
-        .title-wrapper:focus-within .brand-title-input {
+        
+        .brand-title-input.expanded,
+        .brand-title-input:focus {
             width: 100%;
             flex: 1;
+            background: #ffffff;
+            border-color: var(--primary);
         }
         
         .brand-title-input::placeholder {
@@ -134,13 +123,14 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
+            padding: 7px 10px;
+            border-radius: 8px;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
             transition: transform 0.1s;
+            flex-shrink: 0;
         }
         .btn-save-title:active { transform: scale(0.95); }
 
@@ -432,10 +422,10 @@
 
 <div class="app-container">
     <header>
-        <!-- Logo BLIST + Input Judul (ME) yang Dinamis Ukurannya -->
+        <!-- Logo BLIST + Input Judul (ME) yang Background Kotaknya Khusus Huruf Saja -->
         <div class="brand-row">
             <div class="logo-bl" onclick="goHomeClean()" title="Kembali ke Beranda">BLIST</div>
-            <div class="title-wrapper" id="titleWrapper">
+            <div class="title-container">
                 <input type="text" id="appTitleInput" class="brand-title-input" 
                        placeholder="ME"
                        oninput="onTitleTyping()" 
@@ -615,7 +605,6 @@
 
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
-        const wrapper = document.getElementById('titleWrapper');
         
         if (currentUser) {
             inputJudul.readOnly = false;
@@ -627,12 +616,12 @@
             inputJudul.value = currentJudul;
         }
 
-        // Atur panjang input menyesuaikan teks agar background pas seukuran teks (+ sikit)
+        // Atur panjang input menyesuaikan teks agar background pas seukuran huruf
         if (!currentUser || document.activeElement === inputJudul || (currentJudul && currentJudul.trim() !== '')) {
             if (currentJudul && currentJudul.length > 0) {
-                inputJudul.style.width = Math.max(45, (currentJudul.length * 9.5)) + 'px';
+                inputJudul.style.width = Math.max(50, (currentJudul.length * 10)) + 'px';
             } else {
-                inputJudul.style.width = '45px';
+                inputJudul.style.width = '50px';
             }
         }
     }
@@ -671,7 +660,7 @@
             currentListId = getEffectiveListId();
             dataList = [];
             currentJudul = '';
-            document.getElementById('titleWrapper').classList.remove('expanded');
+            document.getElementById('appTitleInput').classList.remove('expanded');
             renderList();
             document.getElementById('inputItem').value = '';
             document.getElementById('appTitleInput').value = '';
@@ -690,14 +679,13 @@
         dataList = [];
         currentJudul = '';
         
-        // Simpan data list kosong baru ke database agar langsung sinkron & siap diisi
         db.ref('lists/' + currentListId).set({
             judul: '',
             items: [],
             updatedAt: new Date().toISOString()
         });
 
-        document.getElementById('titleWrapper').classList.remove('expanded');
+        document.getElementById('appTitleInput').classList.remove('expanded');
         renderList();
         document.getElementById('inputItem').value = '';
         document.getElementById('appTitleInput').value = '';
@@ -711,7 +699,7 @@
         btnSave.style.display = 'block';
         
         const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.style.width = Math.max(45, (inputJudul.value.length * 9.5)) + 'px';
+        inputJudul.style.width = Math.max(50, (inputJudul.value.length * 10)) + 'px';
         
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {}, 800);
@@ -857,7 +845,7 @@
 
     function openAuthModal(mode) {
         authMode = mode;
-        document.getElementById('titleWrapper').classList.add('expanded');
+        document.getElementById('appTitleInput').classList.add('expanded');
         document.getElementById('authTabs').style.display = 'flex';
         switchAuthMode(authMode);
     }
@@ -874,7 +862,6 @@
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
-        // Menggunakan atribut aman anti-password manager prompt
         modalBody.innerHTML = `
             <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
             <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
@@ -945,7 +932,7 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         document.getElementById('inputItem').value = '';
-        document.getElementById('titleWrapper').classList.remove('expanded');
+        document.getElementById('appTitleInput').classList.remove('expanded');
         dataList = [];
         batalEdit();
         window.location.href = window.location.pathname;
