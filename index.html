@@ -374,12 +374,12 @@
     </div>
 </div>
 
-<!-- FIREBASE COMPAT SDK (Aman dijalankan secara Lokal maupun di GitHub Pages) -->
+<!-- FIREBASE SDK COMPAT -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
-    // Konfigurasi API Key Firebase milik Anda
+    // Konfigurasi Firebase Anda
     const firebaseConfig = {
         apiKey: "AIzaSyCqQV_VUK371FozYTXKtkMQ4kFks5iiclE",
         authDomain: "blistme-a9097.firebaseapp.com",
@@ -396,7 +396,7 @@
     }
     const db = firebase.database();
 
-    // Identifikasi User & List ID
+    // System Guest ID & List ID
     let guestId = localStorage.getItem('buatlist_guestId') || ('Tamu-' + Math.floor(1000 + Math.random() * 9000));
     localStorage.setItem('buatlist_guestId', guestId);
 
@@ -410,7 +410,7 @@
 
     function getActiveUser() { return currentUser || guestId; }
 
-    // --- SINKRONISASI REALTIME ---
+    // Synchronize Realtime Database
     function initRealtimeSync() {
         const listRef = db.ref('lists/' + currentListId);
         listRef.on('value', (snapshot) => {
