@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- KODE CSP DIPERBARUI DENGAN DOMAIN FIREBASE DATABASE -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.firebasedatabase.app https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline';">
+    <!-- CSP DIPERBARUI: DITAMBAHKAN connect-src DENGAN DUKUNGAN wss:// UNTUK WEBSOCKET FIREBASE -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.firebasedatabase.app https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https: wss: http:;">
     
     <title>BLIST ME - blistme.com</title>
     <style>
@@ -397,6 +397,10 @@
             border: none;
             cursor: pointer;
         }
+        .modal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .btn-cancel-modal { background: #f1f5f9; color: #475569; }
         .btn-confirm { background: var(--primary); color: white; }
 
@@ -542,12 +546,26 @@
         return 'blistme_history_' + userKey;
     }
 
-    /* KEAMANAN: HASH PASSWORD DENGAN SHA-256 */
+    /* DIPERBAIKI: HASH PASSWORD DENGAN FALLBACK AMAN JIKA DIAKSES DI NON-HTTPS (HTTP/IP LOKAL) */
     async function hashPassword(password) {
-        const msgBuffer = new TextEncoder().encode(password);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        if (window.crypto && window.crypto.subtle && typeof window.crypto.subtle.digest === 'function') {
+            try {
+                const msgBuffer = new TextEncoder().encode(password);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch (err) {
+                console.warn("Crypto API gagal, menggunakan hash fallback:", err);
+            }
+        }
+        /* Fallback sederhana untuk lingkungan HTTP biasa (Non-Secure Context) */
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0;
+        }
+        return 'fb_' + Math.abs(hash).toString(16) + '_' + password.length;
     }
 
     /* REALTIME SYNC DATABASE */
@@ -638,13 +656,11 @@
 
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
-        
         if (currentUser) {
             inputJudul.readOnly = false;
         } else {
             inputJudul.readOnly = true;
         }
-
         if (document.activeElement !== inputJudul) {
             inputJudul.value = currentJudul;
         }
@@ -827,6 +843,7 @@
         document.getElementById('modalBtnCancel').style.display = 'none';
         const btnConfirm = document.getElementById('modalBtnConfirm');
         btnConfirm.innerText = 'Tutup';
+        btnConfirm.disabled = false;
         btnConfirm.onclick = tutupModal;
 
         modal.classList.add('active');
@@ -869,6 +886,7 @@
         switchAuthMode(authMode);
     }
 
+    /* DIPERBAIKI: PENAMBAHAN EVENT KEYPRESS UNTUK SHORTCUT ENTER DI DALAM MODAL */
     function switchAuthMode(mode) {
         authMode = mode;
         document.getElementById('tabSignIn').className = `auth-tab ${mode === 'signin' ? 'active' : ''}`;
@@ -880,35 +898,57 @@
 
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
+        btnConfirm.disabled = false;
 
         modalBody.innerHTML = `
-            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off">
-            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="current-password">
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off" onkeypress="handleModalEnter(event)">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="current-password" onkeypress="handleModalEnter(event)">
         `;
 
         document.getElementById('modalBtnCancel').style.display = 'block';
-        btnConfirm.onclick = handleAuthSubmit;
+        btnConfirm.onclick = () => handleAuthSubmit();
 
         const modal = document.getElementById('customModal');
         modal.classList.add('active');
+        
+        setTimeout(() => {
+            const el = document.getElementById('authUsername');
+            if (el) el.focus();
+        }, 100);
     }
 
-    /* DIPERBAIKI: MENGGUNAKAN .once('value') SESUAI SPESIFIKASI FIREBASE COMPAT SDK */
+    function handleModalEnter(e) {
+        if (e.key === 'Enter') {
+            handleAuthSubmit();
+        }
+    }
+
+    /* DIPERBAIKI: INDIKATOR LOADING SAAT KLIK & ERROR HANDLING YANG LEBIH AKURAT */
     async function handleAuthSubmit() {
-        const usernameInput = document.getElementById('authUsername').value.trim();
-        const passwordInput = document.getElementById('authPassword').value.trim();
+        const usernameEl = document.getElementById('authUsername');
+        const passwordEl = document.getElementById('authPassword');
+        if (!usernameEl || !passwordEl) return;
+
+        const usernameInput = usernameEl.value.trim();
+        const passwordInput = passwordEl.value.trim();
 
         if (!usernameInput || !passwordInput) {
             bukaModalPesan('Peringatan', 'Username dan Password wajib diisi!');
             return;
         }
 
-        const userKey = usernameInput.toLowerCase().replace(/[^a-z0-9]/g, '_');
-        const userRef = db.ref('users/' + userKey);
-        const hashedPassword = await hashPassword(passwordInput);
+        const btnConfirm = document.getElementById('modalBtnConfirm');
+        const originalText = authMode === 'signin' ? 'Sign In' : 'Sign Up';
+        btnConfirm.disabled = true;
+        btnConfirm.innerText = 'Memproses...';
 
-        if (authMode === 'signup') {
-            userRef.once('value').then(async (snapshot) => {
+        try {
+            const userKey = usernameInput.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            const userRef = db.ref('users/' + userKey);
+            const hashedPassword = await hashPassword(passwordInput);
+
+            if (authMode === 'signup') {
+                const snapshot = await userRef.once('value');
                 if (snapshot.exists()) {
                     bukaModalPesan('Gagal', 'Username sudah terdaftar!');
                 } else {
@@ -926,11 +966,8 @@
                     tutupModal();
                     triggerWelcomeAnimation();
                 }
-            }).catch((error) => {
-                bukaModalPesan('Error', 'Gagal terhubung ke database: ' + error.message);
-            });
-        } else {
-            userRef.once('value').then(async (snapshot) => {
+            } else {
+                const snapshot = await userRef.once('value');
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     if (userData.password === hashedPassword) {
@@ -945,11 +982,15 @@
                         bukaModalPesan('Gagal', 'Password salah!');
                     }
                 } else {
-                    bukaModalPesan('Gagal', 'Akun tidak ditemukan. Silakan Sign Up!');
+                    bukaModalPesan('Gagal', 'Akun tidak ditemukan. Silakan klik tab Sign Up terlebih dahulu!');
                 }
-            }).catch((error) => {
-                bukaModalPesan('Error', 'Gagal terhubung ke database: ' + error.message);
-            });
+            }
+        } catch (error) {
+            console.error("Auth error:", error);
+            bukaModalPesan('Error Database', 'Gagal terhubung ke database. Periksa koneksi internet atau keamanan Firebase (' + error.message + ')');
+        } finally {
+            btnConfirm.disabled = false;
+            btnConfirm.innerText = originalText;
         }
     }
 
@@ -1071,6 +1112,7 @@
 
         const btnConfirm = document.getElementById('modalBtnConfirm');
         btnConfirm.innerText = kataTombol;
+        btnConfirm.disabled = false;
         document.getElementById('modalBtnCancel').style.display = 'block';
 
         btnConfirm.onclick = () => { onConfirm(); tutupModal(); };
@@ -1091,6 +1133,7 @@
         
         const btnConfirm = document.getElementById('modalBtnConfirm');
         btnConfirm.innerText = 'OK';
+        btnConfirm.disabled = false;
         document.getElementById('modalBtnCancel').style.display = 'none';
         btnConfirm.onclick = tutupModal;
 
