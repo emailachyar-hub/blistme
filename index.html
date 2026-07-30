@@ -538,6 +538,13 @@
 
     function getActiveUser() { return currentUser || guestId; }
 
+    // Fungsi untuk mendapatkan Key Riwayat unik berdasarkan akun yang aktif
+    function getHistoryKey() {
+        if (!currentUser) return 'blistme_history_guest';
+        const userKey = currentUser.toLowerCase().replace(/[^a-z0-9]/g, '_');
+        return 'blistme_history_' + userKey;
+    }
+
     /* REALTIME SYNC DATABASE */
     function initRealtimeSync() {
         if (currentRefListener) {
@@ -574,7 +581,8 @@
 
     function simpanKeRiwayatLokal() {
         if (!currentUser || dataList.length === 0) return;
-        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+        const historyKey = getHistoryKey();
+        let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
         const idx = history.findIndex(h => h.id === currentListId);
         const itemRiwayat = {
             id: currentListId,
@@ -588,7 +596,7 @@
         } else {
             history.unshift(itemRiwayat);
         }
-        localStorage.setItem('blistme_history', JSON.stringify(history));
+        localStorage.setItem(historyKey, JSON.stringify(history));
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -616,7 +624,6 @@
             inputJudul.value = currentJudul;
         }
 
-        // Atur panjang input menyesuaikan teks agar background pas seukuran huruf
         if (!currentUser || document.activeElement === inputJudul || (currentJudul && currentJudul.trim() !== '')) {
             if (currentJudul && currentJudul.length > 0) {
                 inputJudul.style.width = Math.max(50, (currentJudul.length * 10)) + 'px';
@@ -725,9 +732,10 @@
             kataTombol: 'Hapus',
             onConfirm: () => {
                 db.ref('lists/' + currentListId).remove();
-                let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+                const historyKey = getHistoryKey();
+                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
                 history = history.filter(h => h.id !== currentListId);
-                localStorage.setItem('blistme_history', JSON.stringify(history));
+                localStorage.setItem(historyKey, JSON.stringify(history));
                 window.location.href = window.location.pathname;
             }
         });
@@ -783,7 +791,8 @@
         const modal = document.getElementById('customModal');
         document.getElementById('modalTitle').innerText = 'Riwayat Tersimpan';
         
-        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+        const historyKey = getHistoryKey();
+        let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
         const bodyEl = document.getElementById('modalBody');
 
         if (history.length === 0) {
@@ -824,9 +833,10 @@
             kataTombol: 'Hapus',
             onConfirm: () => {
                 db.ref('lists/' + listId).remove();
-                let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+                const historyKey = getHistoryKey();
+                let history = JSON.parse(localStorage.getItem(historyKey) || '[]');
                 history = history.filter(h => h.id !== listId);
-                localStorage.setItem('blistme_history', JSON.stringify(history));
+                localStorage.setItem(historyKey, JSON.stringify(history));
 
                 if (currentListId === listId) {
                     window.location.href = window.location.pathname;
