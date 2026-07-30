@@ -38,141 +38,145 @@
             flex-direction: column;
             height: 100vh;
             height: 100dvh;
-            padding: 16px 16px 20px 16px;
+            padding: 14px 14px 18px 14px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             position: relative;
         }
 
         /* HEADER LAYOUT */
         header { 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             flex-shrink: 0; 
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .brand-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
         }
 
-        /* LOGO UTAMA FIX HANYA "BLIST" */
+        /* LOGO HANYA "BLIST" */
         .logo-bl {
-            height: 44px;
-            padding: 0 14px;
+            height: 40px;
+            padding: 0 12px;
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: 900;
-            font-size: 16px;
-            letter-spacing: 1px;
+            font-size: 15px;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
             flex-shrink: 0;
         }
         
-        /* Input Judul Daftar + Placeholder Memudar */
+        /* Title & Save Button Wrapper */
+        .title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 2px 6px;
+            transition: border-color 0.2s;
+        }
+        .title-wrapper:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
         .brand-title-input {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             color: var(--text);
-            border: 1.5px solid transparent;
+            border: none;
             background: transparent;
             outline: none;
             width: 100%;
-            padding: 6px 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            padding: 4px;
         }
         
-        /* Style Placeholder agar transparan/memudar tapi tetap kelihatan saat diketik */
         .brand-title-input::placeholder {
-            color: rgba(15, 23, 42, 0.35);
+            color: rgba(15, 23, 42, 0.4);
             font-weight: 600;
-            font-style: italic;
         }
 
         .brand-title-input:read-only {
             cursor: default;
-            border-color: transparent !important;
-            background: transparent !important;
-            box-shadow: none !important;
         }
 
-        /* Animasi Kerlap-kerlip (Blink/Glow) pada ME */
-        .me-blink-anim {
-            animation: blinkGlow 0.8s infinite alternate ease-in-out;
-            color: var(--primary) !important;
-            font-weight: 900;
+        /* Tombol Konfirmasi Save Judul di Kanan */
+        .btn-save-title {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.1s;
         }
-        @keyframes blinkGlow {
-            0% { opacity: 0.3; text-shadow: 0 0 2px rgba(15, 118, 110, 0.2); }
-            100% { opacity: 1; text-shadow: 0 0 12px rgba(15, 118, 110, 0.8); }
-        }
+        .btn-save-title:active { transform: scale(0.95); }
 
-        /* Sub-Bar User & Navigasi Header */
+        /* USER & ACTION BAR (TIDAK BERHAMBURAN) */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--primary-light);
-            padding: 8px 12px;
-            border-radius: 12px;
+            padding: 6px 10px;
+            border-radius: 10px;
             border: 1px solid var(--primary-border);
             gap: 6px;
         }
-        .user-pill {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            max-width: 100px;
-        }
-        .user-badge {
+        .user-info-pill {
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 110px;
         }
-        .guest-label {
-            font-size: 12px;
+        .guest-badge {
+            font-size: 11px;
             font-weight: 700;
             color: #047857;
             background: #dcfce7;
-            padding: 3px 8px;
+            padding: 2px 8px;
             border-radius: 6px;
         }
-        .auth-actions {
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 4px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
+            gap: 3px;
         }
-        .btn-auth {
-            padding: 6px 10px;
-            border-radius: 8px;
+        .btn-header {
+            padding: 5px 8px;
+            border-radius: 6px;
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             border: 1px solid transparent;
-            transition: all 0.15s ease;
             white-space: nowrap;
+            transition: background 0.15s;
         }
-        .btn-new-list { background: var(--primary); color: white; font-weight: 700; border: none; }
-        .btn-history-menu { background: #ffffff; color: var(--primary); border-color: #a7f3d0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .btn-delete-list { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
-        .btn-create-acc { background: var(--primary); color: white; border: none; font-weight: 700; }
-        .btn-login-link { background: transparent; color: var(--primary); text-decoration: underline; font-weight: 600; padding: 4px 6px; }
-        .btn-logout { background: #f1f5f9; color: #64748b; border-color: #cbd5e1; }
+        .btn-h-new { background: var(--primary); color: white; font-weight: 700; border: none; }
+        .btn-h-hist { background: #ffffff; color: var(--primary); border-color: #a7f3d0; }
+        .btn-h-del { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+        .btn-h-out { background: #f1f5f9; color: #64748b; border-color: #cbd5e1; }
+        .btn-h-acc { background: var(--primary); color: white; font-weight: 700; border: none; }
+        .btn-h-login { background: transparent; color: var(--primary); text-decoration: underline; font-weight: 600; }
 
         /* AREA DAFTAR NAMA */
         .list-area-wrapper {
@@ -191,7 +195,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             background: #ffffff;
-            padding-bottom: 60px;
+            padding-bottom: 55px;
         }
         
         ul { list-style: none; }
@@ -200,13 +204,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-bottom: 1px solid var(--border);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
-            transition: background-color 0.15s ease;
         }
         li:last-child { border-bottom: none; }
         li:active { background-color: #f1f5f9; }
@@ -218,107 +221,126 @@
         .item-text { flex: 1; word-break: break-word; }
         .item-owner { font-size: 11px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
-        /* FLOATING BOTTOM BAR (SALIN LINK & SHARE WHATSAPP) */
+        /* FLOATING SHARE BAR (SATU TOMBOL UTAMA + WHATSAPP) */
         .share-floating-bar {
             position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.94);
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
             border: 1px solid var(--primary-border);
-            padding: 6px;
-            border-radius: 30px;
+            padding: 5px;
+            border-radius: 24px;
             display: flex;
-            gap: 6px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
             z-index: 10;
         }
 
-        .btn-share-action {
+        .single-share-container {
+            display: flex;
+            width: 100%;
+            gap: 4px;
+        }
+
+        .btn-main-copy {
             flex: 1;
-            border: none;
-            padding: 9px 10px;
-            border-radius: 20px;
-            font-size: 11px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--primary-border);
+            padding: 8px 12px;
+            border-radius: 18px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            transition: all 0.15s ease;
+            transition: all 0.15s;
         }
-        .btn-share-action:active { transform: scale(0.97); }
-        .btn-copy-url { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
-        .btn-share-wa { background: var(--wa-color); color: white; }
+        .btn-main-copy:active { transform: scale(0.98); }
 
-        .stats { font-size: 13px; color: #64748b; margin-bottom: 8px; font-weight: 600; flex-shrink: 0; }
+        .btn-sub-wa {
+            background: var(--wa-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .btn-sub-wa:active { transform: scale(0.98); }
+
+        .stats { font-size: 12px; color: #64748b; margin-bottom: 6px; font-weight: 600; flex-shrink: 0; }
 
         /* AREA INPUT NAMA */
-        .input-section { flex-shrink: 0; margin-bottom: 6px; }
-        .input-group { margin-bottom: 8px; }
+        .input-section { flex-shrink: 0; margin-bottom: 4px; }
+        .input-group { margin-bottom: 6px; }
         .input-group input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 11px 14px;
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
             outline: none;
             transition: border-color 0.15s;
         }
         .input-group input:focus { border-color: var(--primary); }
 
-        .action-buttons { display: flex; gap: 8px; }
+        .action-buttons { display: flex; gap: 6px; }
         .btn-touch {
             flex: 1;
-            padding: 12px;
-            min-height: 46px;
+            padding: 11px;
+            min-height: 42px;
             border-radius: var(--radius);
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.1s ease;
         }
         .btn-touch:active { transform: scale(0.98); }
-        .btn-add { background: var(--primary); color: white; width: 100%; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3); }
+        .btn-add { background: var(--primary); color: white; width: 100%; box-shadow: 0 3px 10px rgba(15, 118, 110, 0.25); }
         .btn-save { background: var(--primary); color: white; }
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* POP-UP MODAL ERGONOMIS BAWAH LAYAR (JANGKAUAN JARI) */
+        /* POP-UP MODAL (AMAN KEYBOARD HP & POSISI PAS) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* Pindah ke bawah agar dekat dengan jempol */
-            padding-bottom: 24px;
+            align-items: flex-end; 
+            padding-bottom: 30px;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 1000;
-            padding-left: 16px;
-            padding-right: 16px;
+            padding-left: 14px;
+            padding-right: 14px;
             overflow-y: auto;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card {
             background: var(--surface);
             width: 100%;
-            max-width: 420px;
-            padding: 20px;
-            border-radius: 20px;
+            max-width: 400px;
+            padding: 18px;
+            border-radius: 18px;
             box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
-            transform: translateY(30px);
+            transform: translateY(20px);
             transition: transform 0.2s ease;
-            max-height: 80vh;
+            max-height: 75vh;
             display: flex;
             flex-direction: column;
         }
@@ -329,13 +351,13 @@
             background: #f1f5f9;
             padding: 3px;
             border-radius: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
         .auth-tab {
             flex: 1;
             text-align: center;
-            padding: 8px;
-            font-size: 13px;
+            padding: 7px;
+            font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             border-radius: 6px;
@@ -347,24 +369,24 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .modal-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text); text-align: center; }
-        .modal-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; overflow-y: auto; }
+        .modal-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); text-align: center; }
+        .modal-body { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; overflow-y: auto; }
         .modal-input {
             width: 100%;
-            padding: 12px 14px;
+            padding: 11px 12px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
         }
         .modal-input:focus { border-color: var(--primary); }
-        .modal-actions { display: flex; gap: 8px; }
+        .modal-actions { display: flex; gap: 6px; }
         .modal-btn {
             flex: 1;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 11px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             border: none;
             cursor: pointer;
         }
@@ -372,14 +394,14 @@
         .btn-confirm { background: var(--primary); color: white; }
 
         /* Item Riwayat */
-        .history-list { display: flex; flex-direction: column; gap: 8px; }
+        .history-list { display: flex; flex-direction: column; gap: 6px; }
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 8px;
             background: #fafafa;
         }
         .history-info { 
@@ -390,26 +412,28 @@
             flex: 1;
             cursor: pointer;
         }
-        .history-title { font-size: 13px; font-weight: 700; color: var(--primary); }
-        .history-meta { font-size: 11px; color: #64748b; }
-        .btn-hist-del { background: #fee2e2; color: #dc2626; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
+        .history-title { font-size: 12px; font-weight: 700; color: var(--primary); }
+        .history-meta { font-size: 10px; color: #64748b; }
+        .btn-hist-del { background: #fee2e2; color: #dc2626; border: none; padding: 5px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <header>
-        <!-- Baris 1: Logo Pas "BLIST" + Input Judul "ME" / Placeholder -->
+        <!-- Baris 1: Logo Kotak (BLIST) + Input Judul (ME) + Tombol Save Judul -->
         <div class="brand-row">
             <div class="logo-bl">BLIST</div>
-            <input type="text" id="appTitleInput" class="brand-title-input" 
-                   placeholder="ketik judul disini..."
-                   oninput="updateJudulUtama()" 
-                   onclick="handleTitleClick()" 
-                   onfocus="handleTitleClick()">
+            <div class="title-wrapper">
+                <input type="text" id="appTitleInput" class="brand-title-input" 
+                       placeholder="ME"
+                       oninput="onTitleTyping()" 
+                       autocomplete="off">
+                <button id="btnSaveTitle" class="btn-save-title" style="display: none;" onclick="confirmSaveTitle()">Simpan</button>
+            </div>
         </div>
 
-        <!-- Baris 2: Menu Header -->
+        <!-- Baris 2: User Status & Menu Tertata Rapi -->
         <div class="user-catchy-bar" id="authBar"></div>
     </header>
 
@@ -419,14 +443,16 @@
             <ul id="daftarList"></ul>
         </div>
 
-        <!-- Floating Action Bar: Salin Link & Share Direct WhatsApp -->
+        <!-- Floating Share Bar: Salin Link (Tersalin) & WhatsApp -->
         <div class="share-floating-bar" id="shareFloatingBar" style="display: none;">
-            <button class="btn-share-action btn-copy-url" onclick="copyListLink()">
-                Salin Link Daftar
-            </button>
-            <button class="btn-share-action btn-share-wa" onclick="shareDirectWhatsApp()">
-                Share WhatsApp
-            </button>
+            <div class="single-share-container">
+                <button class="btn-main-copy" onclick="copyListLinkWithState()">
+                    <span id="copyBtnText">Salin Link Daftar</span>
+                </button>
+                <button class="btn-sub-wa" onclick="shareDirectWhatsApp()">
+                    💬 WA
+                </button>
+            </div>
         </div>
     </div>
 
@@ -443,7 +469,7 @@
     </div>
 </div>
 
-<!-- POP-UP MODAL (BAWAH LAYAR / DESAIN ERGONOMIS) -->
+<!-- POP-UP MODAL (BAWAH LAYAR & AMAN KEYBOARD) -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -506,8 +532,8 @@
     let currentJudul = '';
     let selectedEditIndex = null;
     let authMode = 'signin';
-    let isAnimatingTitle = false;
     let currentRefListener = null;
+    let typingTimer = null;
 
     function getActiveUser() { return currentUser || guestId; }
 
@@ -564,11 +590,13 @@
         localStorage.setItem('blistme_history', JSON.stringify(history));
     }
 
-    // Selalu hapus inputan dan bersihkan state saat refresh
+    // Reset list kosong saat halaman home dimuat ulang
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('inputItem').value = '';
-        dataList = [];
-        renderList();
+        if (!urlParams.get('list') && !currentUser) {
+            dataList = [];
+            renderList();
+        }
     });
 
     initRealtimeSync();
@@ -583,7 +611,7 @@
             inputJudul.readOnly = true;
         }
 
-        if (document.activeElement !== inputJudul && !isAnimatingTitle) {
+        if (document.activeElement !== inputJudul) {
             inputJudul.value = currentJudul;
         }
     }
@@ -594,25 +622,21 @@
 
         if (currentUser) {
             authBar.innerHTML = `
-                <div class="user-pill">
-                    <span class="user-badge">${currentUser}</span>
-                </div>
-                <div class="auth-actions">
-                    <button class="btn-auth btn-new-list" onclick="buatLinkDaftarBaru()">Buat Baru</button>
-                    <button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">Riwayat</button>
-                    <button class="btn-auth btn-delete-list" onclick="hapusDaftarAktif()">Hapus</button>
-                    <button class="btn-auth btn-logout" onclick="logout()">Logout</button>
+                <div class="user-info-pill" title="${currentUser}">👤 ${currentUser}</div>
+                <div class="header-actions">
+                    <button class="btn-header btn-h-new" onclick="buatLinkDaftarBaru()">Baru</button>
+                    <button class="btn-header btn-h-hist" onclick="bukaModalRiwayat()">Riwayat</button>
+                    <button class="btn-header btn-h-del" onclick="hapusDaftarAktif()">Hapus</button>
+                    <button class="btn-header btn-h-out" onclick="logout()">Keluar</button>
                 </div>
             `;
             shareFloatingBar.style.display = 'flex';
         } else {
             authBar.innerHTML = `
-                <div class="user-pill">
-                    <span class="guest-label">Tamu</span>
-                </div>
-                <div class="auth-actions">
-                    <button class="btn-auth btn-create-acc" onclick="openAuthModal('signup')">Buat Akun</button>
-                    <button class="btn-auth btn-login-link" onclick="openAuthModal('signin')">Masuk</button>
+                <div class="guest-badge">Mode Tamu</div>
+                <div class="header-actions">
+                    <button class="btn-header btn-h-acc" onclick="openAuthModal('signup')">Buat Akun</button>
+                    <button class="btn-header btn-h-login" onclick="openAuthModal('signin')">Masuk</button>
                 </div>
             `;
             shareFloatingBar.style.display = 'none';
@@ -620,7 +644,6 @@
         renderJudul();
     }
 
-    /* AKSI BUAT BARU DENGAN ANIMASI ME KERLAP KERLIP */
     function buatLinkDaftarBaru() {
         if (!currentUser) return;
         const newSlug = Math.random().toString(36).substring(2, 7);
@@ -629,37 +652,32 @@
         dataList = [];
         currentJudul = '';
         renderList();
-        
         document.getElementById('inputItem').value = '';
-        playLongBlinkMeAnimation();
+        document.getElementById('appTitleInput').value = '';
     }
 
-    /* ANIMASI "ME" BERTAHAN LAMA DENGAN KERLAP KERLIP */
-    function playLongBlinkMeAnimation() {
-        if (isAnimatingTitle) return;
-        isAnimatingTitle = true;
+    function onTitleTyping() {
+        if (!currentUser) return;
+        const btnSave = document.getElementById('btnSaveTitle');
+        btnSave.style.display = 'block';
+        
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            // Berhenti mengetik, tombol konfirmasi save tetap ada agar user bisa klik
+        }, 800);
+    }
 
+    function confirmSaveTitle() {
         const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.value = "ME";
-        inputJudul.classList.add('me-blink-anim');
-
-        // Bertahan kerlap-kerlip selama 2.8 detik
+        currentJudul = inputJudul.value;
+        simpanKeDatabase();
+        
+        const btnSave = document.getElementById('btnSaveTitle');
+        btnSave.innerText = 'Tersimpan ✓';
         setTimeout(() => {
-            inputJudul.classList.remove('me-blink-anim');
-            let textToDelete = "ME";
-
-            let deleteInterval = setInterval(() => {
-                if (textToDelete.length > 0) {
-                    textToDelete = textToDelete.slice(0, -1);
-                    inputJudul.value = textToDelete;
-                } else {
-                    clearInterval(deleteInterval);
-                    inputJudul.value = "";
-                    currentJudul = "";
-                    isAnimatingTitle = false;
-                }
-            }, 100);
-        }, 2800);
+            btnSave.style.display = 'none';
+            btnSave.innerText = 'Simpan';
+        }, 1200);
     }
 
     function hapusDaftarAktif() {
@@ -669,17 +687,37 @@
             kataTombol: 'Hapus',
             onConfirm: () => {
                 db.ref('lists/' + currentListId).remove();
-
                 let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
                 history = history.filter(h => h.id !== currentListId);
                 localStorage.setItem('blistme_history', JSON.stringify(history));
-
                 window.location.href = window.location.pathname;
             }
         });
     }
 
-    /* SHARE DIRECT KE WHATSAPP */
+    function copyListLinkWithState() {
+        if (!currentUser) return;
+        if (!urlParams.get('list')) {
+            const randomSlug = Math.random().toString(36).substring(2, 7);
+            currentListId = randomSlug;
+            simpanKeDatabase();
+            initRealtimeSync();
+        }
+
+        const baseUrl = window.location.origin + window.location.pathname;
+        const actualShareUrl = `${baseUrl}?list=${currentListId}`;
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(actualShareUrl).then(() => {
+                const btnText = document.getElementById('copyBtnText');
+                btnText.innerText = 'Tersalin!';
+                setTimeout(() => {
+                    btnText.innerText = 'Salin Link Daftar';
+                }, 2000);
+            });
+        }
+    }
+
     function shareDirectWhatsApp() {
         if (!currentUser) return;
         if (dataList.length === 0) {
@@ -695,7 +733,7 @@
         dataList.forEach((item, index) => {
             teksWA += `${index + 1}. ${item.text}\n`;
         });
-        teksWA += `\nBuka link daftar: ${actualShareUrl}`;
+        teksWA += `\nLink pengisian/hasil: ${actualShareUrl}`;
 
         const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(teksWA)}`;
         window.open(waUrl, '_blank');
@@ -748,7 +786,6 @@
             kataTombol: 'Hapus',
             onConfirm: () => {
                 db.ref('lists/' + listId).remove();
-
                 let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
                 history = history.filter(h => h.id !== listId);
                 localStorage.setItem('blistme_history', JSON.stringify(history));
@@ -766,15 +803,6 @@
         setTimeout(() => {
             document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth', block: 'end' });
         }, 300);
-    }
-
-    function handleTitleClick() {
-        if (!currentUser) return;
-        const inputJudul = document.getElementById('appTitleInput');
-        if (inputJudul.value === 'ME') {
-            inputJudul.value = '';
-            currentJudul = '';
-        }
     }
 
     function openAuthModal(mode) {
@@ -795,9 +823,10 @@
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
+        // Atribut autocomplete dan name acak mencegah browser memicu simpan sandi/autofill
         modalBody.innerHTML = `
-            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off">
-            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="off">
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="new-password" name="rand_user_${Math.random()}">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" name="rand_pass_${Math.random()}">
         `;
 
         document.getElementById('modalBtnCancel').style.display = 'block';
@@ -836,7 +865,6 @@
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', 'Akun berhasil dibuat!');
-                        setTimeout(playLongBlinkMeAnimation, 400);
                     });
                 }
             });
@@ -852,7 +880,6 @@
                         initRealtimeSync();
                         renderAuthBar();
                         bukaModalPesan('Berhasil', `Selamat datang, ${currentUser}!`);
-                        setTimeout(playLongBlinkMeAnimation, 400);
                     } else {
                         bukaModalPesan('Gagal', 'Password salah!');
                     }
@@ -870,34 +897,6 @@
         dataList = [];
         batalEdit();
         window.location.href = window.location.pathname;
-    }
-
-    function copyListLink() {
-        if (!currentUser) return;
-        if (!urlParams.get('list')) {
-            const randomSlug = Math.random().toString(36).substring(2, 7);
-            currentListId = randomSlug;
-            simpanKeDatabase();
-            initRealtimeSync();
-        }
-
-        const baseUrl = window.location.origin + window.location.pathname;
-        const actualShareUrl = `${baseUrl}?list=${currentListId}`;
-
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(actualShareUrl).then(() => {
-                bukaModalPesan('Link Disalin', 'Link daftar berhasil disalin.');
-            });
-        } else {
-            bukaModalPesan('Link Disalin', actualShareUrl);
-        }
-    }
-
-    function updateJudulUtama() {
-        if (!currentUser) return;
-        const inputJudul = document.getElementById('appTitleInput');
-        currentJudul = inputJudul.value;
-        if (dataList.length > 0) simpanKeDatabase();
     }
 
     function renderList() {
@@ -1022,7 +1021,7 @@
         
         const bodyEl = document.getElementById('modalBody');
         if (pesan) {
-            bodyEl.innerHTML = `<p style="text-align:center; font-size:14px; color:#475569; word-break:break-all;">${pesan}</p>`;
+            bodyEl.innerHTML = `<p style="text-align:center; font-size:13px; color:#475569; word-break:break-all;">${pesan}</p>`;
         } else {
             bodyEl.innerHTML = '';
         }
