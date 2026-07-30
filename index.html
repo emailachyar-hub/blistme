@@ -70,22 +70,34 @@
             flex-shrink: 0;
         }
         
-        /* Edit Judul Langsung di Tempat ME */
+        /* Input Judul / Tampilan ME */
         .brand-title-input {
             font-size: 18px;
             font-weight: 700;
             color: var(--text);
-            border: 1px transparent solid;
+            border: 1.5px solid transparent;
             background: transparent;
             outline: none;
             width: 100%;
-            padding: 4px 6px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
-        .brand-title-input:hover, .brand-title-input:focus {
-            background: #f8fafc;
-            border-color: #cbd5e1;
+        .brand-title-input:read-only {
+            cursor: default;
+            border-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        /* Animasi Berkedip / Glow untuk Memberi Tahu Judul Bisa Diisi */
+        .brand-title-input.pulse-anim {
+            animation: glowPulse 1.8s infinite ease-in-out;
+        }
+        @keyframes glowPulse {
+            0% { border-color: rgba(30, 122, 83, 0.2); box-shadow: 0 0 0 rgba(30, 122, 83, 0); }
+            50% { border-color: var(--primary); box-shadow: 0 0 10px rgba(30, 122, 83, 0.35); }
+            100% { border-color: rgba(30, 122, 83, 0.2); box-shadow: 0 0 0 rgba(30, 122, 83, 0); }
         }
 
         /* Auth Bar Header */
@@ -119,9 +131,10 @@
         .btn-sign-in { background: var(--primary); color: white; border: none; }
         .btn-logout { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
 
-        /* Tombol Salin Link (Desain Keren Baru) */
+        /* Tombol Salin Link (Sembunyi secara Default) */
         .share-bar {
             margin-bottom: 8px;
+            display: none;
         }
         .btn-copy-link {
             width: 100%;
@@ -232,7 +245,7 @@
         .modal-card {
             background: var(--surface);
             width: 100%;
-            max-width: 330px;
+            max-width: 320px;
             padding: 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -297,13 +310,14 @@
         <div class="header-top">
             <div class="brand">
                 <div class="logo-bl">BLIST</div>
-                <!-- Input judul langsung di tempat ME (Bisa Spasi) -->
-                <input type="text" id="appTitleInput" class="brand-title-input" value="ME" placeholder="Ketik Judul..." oninput="updateJudulUtama()">
+                <!-- Input judul langsung di tempat ME (Memiliki animasi glow saat Sign In) -->
+                <input type="text" id="appTitleInput" class="brand-title-input" value="ME" oninput="updateJudulUtama()">
             </div>
             <div class="auth-bar" id="authBar"></div>
         </div>
 
-        <div class="share-bar">
+        <!-- Tombol Salin Link (Hanya Tampil Saat Login) -->
+        <div class="share-bar" id="shareBar">
             <button class="btn-copy-link" onclick="copyListLink()">
                 📋 Salin Link Daftar
             </button>
@@ -328,10 +342,9 @@
     </div>
 </div>
 
-<!-- CONTAINER MODAL POP-IN / SIGN IN & SIGN UP -->
+<!-- CONTAINER MODAL POP-IN -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
-        <!-- Auth Tab Bar -->
         <div class="auth-tabs" id="authTabs" style="display: none;">
             <div class="auth-tab active" id="tabSignIn" onclick="switchAuthMode('signin')">Sign In</div>
             <div class="auth-tab" id="tabSignUp" onclick="switchAuthMode('signup')">Sign Up</div>
@@ -351,7 +364,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
 <script>
-    // Konfigurasi Firebase
+    // Konfigurasi Firebase Realtime Database
     const firebaseConfig = {
         apiKey: "AIzaSyCqQV_VUK371FozYTXKtkMQ4kFks5iiclE",
         authDomain: "blistme-a9097.firebaseapp.com",
@@ -367,7 +380,7 @@
     }
     const db = firebase.database();
 
-    // Guest ID & List ID System
+    // System Guest ID & List ID
     let guestId = localStorage.getItem('buatlist_guestId') || ('Tamu-' + Math.floor(1000 + Math.random() * 9000));
     localStorage.setItem('buatlist_guestId', guestId);
 
@@ -378,7 +391,7 @@
     let dataList = [];
     let currentJudul = 'ME';
     let selectedEditIndex = null;
-    let authMode = 'signin'; // 'signin' atau 'signup'
+    let authMode = 'signin';
 
     function getActiveUser() { return currentUser || guestId; }
 
@@ -408,7 +421,7 @@
         });
     }
 
-    // Inisialisasi
+    // Inisialisasi Aplikasi
     initRealtimeSync();
     renderAuthBar();
     renderInputActions();
@@ -416,16 +429,23 @@
     /* --- AUTHENTICATION (SIGN IN & SIGN UP) --- */
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
+        const shareBar = document.getElementById('shareBar');
+
         if (currentUser) {
+            // TAMPILKAN TOMBOL SALIN LINK HANYA SAAT USER SIGN IN
             authBar.innerHTML = `
                 <span class="user-badge">${currentUser}</span>
                 <button class="btn-auth btn-logout" onclick="logout()">Logout</button>
             `;
+            shareBar.style.display = 'block';
         } else {
+            // SEMBUNYIKAN TOMBOL SALIN LINK UNTUK TAMU
             authBar.innerHTML = `
                 <button class="btn-auth btn-sign-in" onclick="openAuthModal('signin')">Sign In</button>
             `;
+            shareBar.style.display = 'none';
         }
+        renderJudul();
     }
 
     function openAuthModal(mode) {
@@ -464,19 +484,17 @@
         const passwordInput = document.getElementById('authPassword').value.trim();
 
         if (!usernameInput || !passwordInput) {
-            bukaModalPesan('Error', 'Username dan Password tidak boleh kosong!');
+            bukaModalPesan('Peringatan', 'Username dan Password wajib diisi!');
             return;
         }
 
-        // Sanitasi key unik Firebase
         const userKey = usernameInput.toLowerCase().replace(/[^a-z0-9]/g, '_');
         const userRef = db.ref('users/' + userKey);
 
         if (authMode === 'signup') {
-            // Pendaftaran Akun Baru ke Realtime Database
             userRef.get().then((snapshot) => {
                 if (snapshot.exists()) {
-                    bukaModalPesan('Pendaftaran Gagal', 'Username/Nomor ini sudah terdaftar! Silakan Sign In.');
+                    bukaModalPesan('Gagal', 'Username/Nomor ini sudah terdaftar!');
                 } else {
                     userRef.set({
                         username: usernameInput,
@@ -486,12 +504,11 @@
                         currentUser = usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
                         renderAuthBar();
-                        bukaModalPesan('Berhasil', 'Akun berhasil dibuat & Anda telah masuk!');
+                        bukaModalPesan('Berhasil', 'Akun berhasil dibuat!');
                     });
                 }
             });
         } else {
-            // Proses Sign In
             userRef.get().then((snapshot) => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
@@ -499,12 +516,12 @@
                         currentUser = userData.username || usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
                         renderAuthBar();
-                        bukaModalPesan('Berhasil', `Selamat datang kembali, ${currentUser}!`);
+                        bukaModalPesan('Berhasil', `Selamat datang, ${currentUser}!`);
                     } else {
                         bukaModalPesan('Gagal', 'Password salah!');
                     }
                 } else {
-                    bukaModalPesan('Gagal', 'Akun tidak ditemukan. Silakan Sign Up terlebih dahulu!');
+                    bukaModalPesan('Gagal', 'Akun tidak ditemukan. Silakan Sign Up!');
                 }
             });
         }
@@ -517,9 +534,8 @@
         renderAuthBar();
     }
 
-    /* --- SALIN LINK DAFTAR UNIK --- */
+    /* --- SALIN LINK DAFTAR UNIK (POP-UP SINGKAT) --- */
     function copyListLink() {
-        // Jika masih di halaman home, buat ID acak unik singkat (misal: "k82a1")
         if (currentListId === 'home') {
             currentListId = Math.random().toString(36).substring(2, 7);
             simpanKeDatabase();
@@ -530,23 +546,49 @@
         const actualShareUrl = `${baseUrl}?list=${currentListId}`;
 
         navigator.clipboard.writeText(actualShareUrl).then(() => {
-            bukaModalPesan('Link Daftar Disalin!', `Link berhasil disalin:\n\n👉 ${actualShareUrl}\n\nBagikan link ini agar orang lain bisa langsung mengisi nama.`);
+            // POPUP DISEDERHANAKAN SESUAI PERMINTAAN
+            bukaModalPesan('Link Daftar Disalin!', '');
         }).catch(() => {
-            bukaModalPesan('Link Daftar', actualShareUrl);
+            bukaModalPesan('Link Daftar Disalin!', actualShareUrl);
         });
     }
 
-    /* --- EDIT JUDUL HEADER (ME) --- */
+    /* --- EDIT JUDUL HEADER (ME) & ANIMASI GLOW --- */
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
+        
+        if (currentUser) {
+            // HANYA BISA DIEDIT KETIKA SUDAH LOGGED IN
+            inputJudul.readOnly = false;
+            inputJudul.placeholder = "Ketik judul disini...";
+            
+            // Tambahkan animasi glowing berkedip jika judul masih default 'ME'
+            if (!inputJudul.value || inputJudul.value === 'ME') {
+                inputJudul.classList.add('pulse-anim');
+            } else {
+                inputJudul.classList.remove('pulse-anim');
+            }
+        } else {
+            // UNTUK TAMU: READ-ONLY (TIDAK BISA EDIT)
+            inputJudul.readOnly = true;
+            inputJudul.placeholder = "";
+            inputJudul.classList.remove('pulse-anim');
+        }
+
         if (document.activeElement !== inputJudul) {
             inputJudul.value = currentJudul;
         }
     }
 
     function updateJudulUtama() {
-        const inputVal = document.getElementById('appTitleInput').value;
+        const inputJudul = document.getElementById('appTitleInput');
+        if (!currentUser) return; // Mencegah edit jika belum login
+
+        const inputVal = inputJudul.value;
         currentJudul = inputVal !== '' ? inputVal : 'ME';
+        
+        // Matikan animasi kilau begitu pengguna mulai mengetik
+        inputJudul.classList.remove('pulse-anim');
         simpanKeDatabase();
     }
 
@@ -667,11 +709,17 @@
         modal.classList.add('active');
     }
 
-    function bukaModalPesan(judul, pesan) {
+    function bukaModalPesan(judul, pesan = '') {
         document.getElementById('authTabs').style.display = 'none';
         const modal = document.getElementById('customModal');
         document.getElementById('modalTitle').innerText = judul;
-        document.getElementById('modalBody').innerHTML = `<p style="text-align:center; font-size:14px; color:#4b5563; white-space:pre-line;">${pesan}</p>`;
+        
+        const bodyEl = document.getElementById('modalBody');
+        if (pesan) {
+            bodyEl.innerHTML = `<p style="text-align:center; font-size:14px; color:#4b5563; word-break:break-all;">${pesan}</p>`;
+        } else {
+            bodyEl.innerHTML = '';
+        }
         
         const btnConfirm = document.getElementById('modalBtnConfirm');
         btnConfirm.innerText = 'OK';
