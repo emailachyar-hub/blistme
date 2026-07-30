@@ -6,7 +6,6 @@
     <title>BLIST ME - blistme.com</title>
     <style>
         :root {
-            /* Harmonisasi Tema Warna Emerald Teal */
             --primary: #0f766e;        
             --primary-hover: #115e59;
             --primary-light: #f0fdf4;  
@@ -39,7 +38,7 @@
             flex-direction: column;
             height: 100vh;
             height: 100dvh;
-            padding: 16px 16px 24px 16px;
+            padding: 16px 16px 20px 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             position: relative;
         }
@@ -53,7 +52,6 @@
             gap: 10px;
         }
 
-        /* Baris Top: Logo & Input Judul Utama */
         .brand-row {
             display: flex;
             align-items: center;
@@ -61,6 +59,7 @@
             width: 100%;
         }
 
+        /* LOGO UTAMA SELALU "BLIST ME" */
         .logo-bl {
             height: 44px;
             padding: 0 16px;
@@ -79,9 +78,9 @@
             flex-shrink: 0;
         }
         
-        /* Input Judul Utama */
+        /* Input Judul Daftar Baru/Edit */
         .brand-title-input {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--text);
             border: 1.5px solid transparent;
@@ -99,7 +98,7 @@
             box-shadow: none !important;
         }
 
-        /* Animasi Glow Pulse */
+        /* Animasi Pulse Input Judul */
         .brand-title-input.pulse-anim {
             animation: glowPulse 1.8s infinite ease-in-out;
         }
@@ -109,7 +108,7 @@
             100% { border-color: rgba(15, 118, 110, 0.2); box-shadow: 0 0 0 rgba(15, 118, 110, 0); }
         }
 
-        /* Sub-Bar Akun & Status */
+        /* Sub-Bar User & Navigasi */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
@@ -118,12 +117,13 @@
             padding: 8px 12px;
             border-radius: 12px;
             border: 1px solid var(--primary-border);
+            gap: 6px;
         }
         .user-pill {
             display: flex;
             align-items: center;
             gap: 6px;
-            max-width: 130px;
+            max-width: 100px;
         }
         .user-badge {
             font-size: 12px;
@@ -145,11 +145,13 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
         .btn-auth {
-            padding: 6px 9px;
+            padding: 6px 8px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             border: 1px solid transparent;
@@ -158,31 +160,12 @@
         }
         .btn-new-list { background: var(--primary); color: white; font-weight: 700; border: none; }
         .btn-history-menu { background: #ffffff; color: var(--primary); border-color: #a7f3d0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-delete-list { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
         .btn-create-acc { background: var(--primary); color: white; border: none; font-weight: 700; }
         .btn-login-link { background: transparent; color: var(--primary); text-decoration: underline; font-weight: 600; padding: 4px 6px; }
-        .btn-logout { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+        .btn-logout { background: #f1f5f9; color: #64748b; border-color: #cbd5e1; }
 
-        /* Tombol Salin Link */
-        .share-bar { display: none; }
-        .btn-copy-link {
-            width: 100%;
-            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
-            color: white;
-            border: none;
-            padding: 9px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 3px 10px rgba(15, 118, 110, 0.25);
-        }
-        .btn-copy-link:active { transform: scale(0.98); }
-
-        /* Area Daftar Nama */
+        /* AREA DAFTAR NAMA */
         .list-area-wrapper {
             position: relative;
             flex: 1;
@@ -199,7 +182,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius);
             background: #ffffff;
-            padding-bottom: 50px;
+            padding-bottom: 60px;
         }
         
         ul { list-style: none; }
@@ -210,7 +193,7 @@
             align-items: center;
             padding: 14px 16px;
             border-bottom: 1px solid var(--border);
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 500;
             cursor: pointer;
             user-select: none;
@@ -224,57 +207,68 @@
         }
         
         .item-text { flex: 1; word-break: break-word; }
-        .item-owner { font-size: 12px; color: #64748b; margin-left: 8px; font-weight: 400; }
+        .item-owner { font-size: 11px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
-        /* Tombol Share Floating */
-        .btn-share-floating {
+        /* UI BAR SALIN LINK & SHARE DAFTAR CANTIK (FLOATING BOTTOM BAR) */
+        .share-floating-bar {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: var(--wa-color);
-            color: white;
-            border: none;
-            padding: 9px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: none;
-            align-items: center;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--primary-border);
+            padding: 6px;
+            border-radius: 30px;
+            display: flex;
             gap: 6px;
-            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
             z-index: 10;
         }
 
+        .btn-share-action {
+            flex: 1;
+            border: none;
+            padding: 9px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+        .btn-share-action:active { transform: scale(0.97); }
+        .btn-copy-url { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+        .btn-share-wa { background: var(--wa-color); color: white; }
+
         .stats { font-size: 13px; color: #64748b; margin-bottom: 8px; font-weight: 600; flex-shrink: 0; }
 
-        /* Area Input Nama */
-        .input-section { 
-            flex-shrink: 0; 
-            margin-bottom: 10px;
-        }
-        .input-group { margin-bottom: 10px; }
+        /* AREA INPUT NAMA */
+        .input-section { flex-shrink: 0; margin-bottom: 6px; }
+        .input-group { margin-bottom: 8px; }
         .input-group input {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border: 2px solid var(--border);
             border-radius: var(--radius);
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 500;
             outline: none;
             transition: border-color 0.15s;
         }
         .input-group input:focus { border-color: var(--primary); }
 
-        /* Tombol Aksi */
         .action-buttons { display: flex; gap: 8px; }
         .btn-touch {
             flex: 1;
-            padding: 14px;
-            min-height: 50px;
+            padding: 12px;
+            min-height: 46px;
             border-radius: var(--radius);
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             border: none;
             cursor: pointer;
             display: flex;
@@ -288,15 +282,15 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* MODAL OVERLAY - DINAIKKAN AGAR TIDAK KETUTUPAN KEYBOARD HP */
+        /* MODAL POP-UP (RESPONSIF UP & AMAN AUTOFILL BROWSER) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Mengubah penjajaran ke atas */
-            padding-top: 12vh;       /* Memberi ruang ruang atas yang cukup tinggi */
+            align-items: flex-start;
+            padding-top: 10vh;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
@@ -378,9 +372,7 @@
             border: 1px solid var(--border);
             border-radius: 10px;
             background: #fafafa;
-            transition: background 0.15s;
         }
-        .history-item:hover { background: var(--primary-light); }
         .history-info { 
             display: flex; 
             flex-direction: column; 
@@ -388,44 +380,27 @@
             text-align: left; 
             flex: 1;
             cursor: pointer;
-            padding-right: 8px;
         }
-        .history-title { font-size: 14px; font-weight: 700; color: var(--primary); }
+        .history-title { font-size: 13px; font-weight: 700; color: var(--primary); }
         .history-meta { font-size: 11px; color: #64748b; }
-        .history-btns { display: flex; gap: 4px; }
-        .btn-hist-act {
-            padding: 6px 10px;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-hist-del { background: #fee2e2; color: #dc2626; }
+        .btn-hist-del { background: #fee2e2; color: #dc2626; border: none; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
     <header>
-        <!-- Baris 1: Logo & Judul Utama -->
+        <!-- Baris 1: Logo Tetap BLIST ME & Input Judul Daftar -->
         <div class="brand-row">
-            <div class="logo-bl">BLIST</div>
+            <div class="logo-bl">BLIST ME</div>
             <input type="text" id="appTitleInput" class="brand-title-input" value="ME" 
                    oninput="updateJudulUtama()" 
                    onclick="handleTitleClick()" 
                    onfocus="handleTitleClick()">
         </div>
 
-        <!-- Baris 2: Sub-Bar Status Akun & Tombol Aksi -->
+        <!-- Baris 2: Menu Header (Buat Baru | Riwayat | Hapus | Logout) -->
         <div class="user-catchy-bar" id="authBar"></div>
-
-        <!-- Baris 3: Tombol Copy Link -->
-        <div class="share-bar" id="shareBar">
-            <button class="btn-copy-link" onclick="copyListLink()">
-                📋 Salin Link Daftar
-            </button>
-        </div>
     </header>
 
     <!-- Area Daftar Nama -->
@@ -433,25 +408,32 @@
         <div class="list-area" id="listArea">
             <ul id="daftarList"></ul>
         </div>
-        <button class="btn-share-floating" id="btnShareFloating" onclick="shareDaftarTeks()" title="Bagikan Teks Daftar">
-            📤 Share Daftar
-        </button>
+
+        <!-- UI Salin Link & Share Daftar Cantik (Tampil Saat Sign In) -->
+        <div class="share-floating-bar" id="shareFloatingBar" style="display: none;">
+            <button class="btn-share-action btn-copy-url" onclick="copyListLink()">
+                Salin Link Daftar
+            </button>
+            <button class="btn-share-action btn-share-wa" onclick="shareDaftarTeks()">
+                Share Daftar
+            </button>
+        </div>
     </div>
 
     <div class="stats">
         Total: <strong id="totalItem">0</strong> nama
     </div>
 
-    <!-- Area Input Nama -->
+    <!-- Area Input Nama (Selalu Direset Kosong) -->
     <div class="input-section" id="inputSection">
         <div class="input-group">
-            <input type="text" id="inputItem" placeholder="Ketik nama di sini..." onkeypress="handleEnter(event)" onfocus="autoScrollForKeyboard()">
+            <input type="text" id="inputItem" placeholder="Ketik nama di sini..." onkeypress="handleEnter(event)" onfocus="autoScrollForKeyboard()" autocomplete="off">
         </div>
         <div id="inputActions"></div>
     </div>
 </div>
 
-<!-- MODAL POP-UP (Naiik Ke Atas) -->
+<!-- MODAL POP-UP -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -519,7 +501,7 @@
 
     function getActiveUser() { return currentUser || guestId; }
 
-    /* REALTIME SYNC */
+    /* REALTIME SYNC DATABASE */
     function initRealtimeSync() {
         if (currentRefListener) {
             db.ref('lists/' + currentListId).off('value', currentRefListener);
@@ -541,7 +523,8 @@
             }
             renderJudul();
             renderList();
-            if (currentUser) simpanKeRiwayatLokal();
+            // Hanya simpan ke riwayat jika ada minimal 1 item
+            if (currentUser && dataList.length > 0) simpanKeRiwayatLokal();
         });
     }
 
@@ -552,11 +535,14 @@
             items: dataList,
             updatedAt: new Date().toISOString()
         });
-        if (currentUser) simpanKeRiwayatLokal();
+        // Syarat: Jangan simpan ke riwayat lokal jika daftar masih 0 item
+        if (currentUser && dataList.length > 0) {
+            simpanKeRiwayatLokal();
+        }
     }
 
     function simpanKeRiwayatLokal() {
-        if (!currentUser) return;
+        if (!currentUser || dataList.length === 0) return;
         let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
         const idx = history.findIndex(h => h.id === currentListId);
         const itemRiwayat = {
@@ -573,6 +559,11 @@
         }
         localStorage.setItem('blistme_history', JSON.stringify(history));
     }
+
+    // Selalu hapus inputan daftar saat halaman dimuat/refresh
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById('inputItem').value = '';
+    });
 
     initRealtimeSync();
     renderAuthBar();
@@ -599,47 +590,75 @@
         }
     }
 
-    /* RENDER AUTH BAR (DENGAN FITUR BUAT BARU / NEW LIST) */
+    /* RENDER HEADER ACTIONS (Hapus Icon +, Tambah Tombol Hapus) */
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
-        const shareBar = document.getElementById('shareBar');
-        const btnShareFloating = document.getElementById('btnShareFloating');
+        const shareFloatingBar = document.getElementById('shareFloatingBar');
 
         if (currentUser) {
             authBar.innerHTML = `
                 <div class="user-pill">
-                    <span style="font-size: 13px;">👤</span>
                     <span class="user-badge">${currentUser}</span>
                 </div>
                 <div class="auth-actions">
-                    <button class="btn-auth btn-new-list" onclick="buatLinkDaftarBaru()">➕ Buat Baru</button>
-                    <button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">📜 Riwayat</button>
+                    <button class="btn-auth btn-new-list" onclick="buatLinkDaftarBaru()">Buat Baru</button>
+                    <button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">Riwayat</button>
+                    <button class="btn-auth btn-delete-list" onclick="hapusDaftarAktif()">Hapus</button>
                     <button class="btn-auth btn-logout" onclick="logout()">Logout</button>
                 </div>
             `;
-            shareBar.style.display = 'block';
-            if (btnShareFloating) btnShareFloating.style.display = 'flex';
+            shareFloatingBar.style.display = 'flex';
         } else {
             authBar.innerHTML = `
                 <div class="user-pill">
-                    <span class="guest-label">Akun Tamu</span>
+                    <span class="guest-label">Tamu</span>
                 </div>
                 <div class="auth-actions">
-                    <button class="btn-auth btn-create-acc" onclick="openAuthModal('signup')">Coba Buat Akun 🚀</button>
+                    <button class="btn-auth btn-create-acc" onclick="openAuthModal('signup')">Buat Akun</button>
                     <button class="btn-auth btn-login-link" onclick="openAuthModal('signin')">Masuk</button>
                 </div>
             `;
-            shareBar.style.display = 'none';
-            if (btnShareFloating) btnShareFloating.style.display = 'none';
+            shareFloatingBar.style.display = 'none';
         }
         renderJudul();
     }
 
-    /* FITUR BUAT DAFTAR/LINK BARU */
+    /* AKSI BUAT BARU DENGAN ANIMASI ME */
     function buatLinkDaftarBaru() {
         if (!currentUser) return;
         const newSlug = Math.random().toString(36).substring(2, 7);
-        window.location.href = window.location.pathname + '?list=' + newSlug;
+        // Ubah URL tanpa reload berat
+        window.history.pushState({}, '', window.location.pathname + '?list=' + newSlug);
+        currentListId = newSlug;
+        dataList = [];
+        currentJudul = 'ME';
+        renderList();
+        
+        // Reset inputan
+        document.getElementById('inputItem').value = '';
+        
+        // Triger Animasi Pengetikan "ME"
+        playTitleTypewriterAnimation();
+    }
+
+    /* HAPUS DAFTAR SECARA LANGSUNG DARI HEADER */
+    function hapusDaftarAktif() {
+        if (!currentUser) return;
+        bukaModalCustom({
+            judul: 'Hapus daftar ini?',
+            kataTombol: 'Hapus',
+            onConfirm: () => {
+                // Hapus dari Database & LocalStorage
+                db.ref('lists/' + currentListId).remove();
+
+                let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+                history = history.filter(h => h.id !== currentListId);
+                localStorage.setItem('blistme_history', JSON.stringify(history));
+
+                // Buka halaman baru yang bersih
+                window.location.href = window.location.pathname;
+            }
+        });
     }
 
     function shareDaftarTeks() {
@@ -650,11 +669,11 @@
         }
 
         const judulFix = (currentJudul === 'ketik judul disini...' || !currentJudul) ? 'ME' : currentJudul;
-        let teksRangkuman = `📌 *${judulFix.toUpperCase()}*\n`;
+        let teksRangkuman = `*${judulFix.toUpperCase()}*\n\n`;
         dataList.forEach((item, index) => {
             teksRangkuman += `${index + 1}. ${item.text}\n`;
         });
-        teksRangkuman += `\nDibuat via blistme.com`;
+        teksRangkuman += `\nVia blistme.com`;
 
         if (navigator.share) {
             navigator.share({
@@ -663,16 +682,17 @@
             }).catch(() => {});
         } else if (navigator.clipboard) {
             navigator.clipboard.writeText(teksRangkuman).then(() => {
-                bukaModalPesan('Daftar Disalin!', 'Teks daftar berhasil disalin ke clipboard.');
+                bukaModalPesan('Daftar Disalin', 'Teks daftar berhasil disalin ke clipboard.');
             });
         }
     }
 
+    /* MODAL RIWAYAT (AMAN DARI PROMPT AUTOFILL BROWSER) */
     function bukaModalRiwayat() {
         if (!currentUser) return;
         document.getElementById('authTabs').style.display = 'none';
         const modal = document.getElementById('customModal');
-        document.getElementById('modalTitle').innerText = '📜 Riwayat Tersimpan';
+        document.getElementById('modalTitle').innerText = 'Riwayat Tersimpan';
         
         let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
         const bodyEl = document.getElementById('modalBody');
@@ -684,13 +704,11 @@
             history.forEach(item => {
                 html += `
                     <div class="history-item">
-                        <div class="history-info" onclick="muatRiwayat('${item.id}')" title="Klik untuk Buka & Edit">
-                            <span class="history-title">${item.judul} ✏️</span>
+                        <div class="history-info" onclick="muatRiwayat('${item.id}')">
+                            <span class="history-title">${item.judul}</span>
                             <span class="history-meta">${item.itemCount} nama • ${item.time}</span>
                         </div>
-                        <div class="history-btns">
-                            <button class="btn-hist-act btn-hist-del" onclick="hapusRiwayat('${item.id}')">Hapus</button>
-                        </div>
+                        <button class="btn-hist-del" onclick="hapusRiwayat(event, '${item.id}')">Hapus</button>
                     </div>
                 `;
             });
@@ -710,21 +728,18 @@
         window.location.href = window.location.pathname + '?list=' + listId;
     }
 
-    /* HAPUS LINK DAFTAR LENGKAP REALTIME */
-    function hapusRiwayat(listId) {
+    function hapusRiwayat(event, listId) {
+        event.stopPropagation();
         bukaModalCustom({
-            judul: 'Hapus daftar ini selamanya?',
+            judul: 'Hapus daftar ini dari riwayat?',
             kataTombol: 'Hapus',
             onConfirm: () => {
-                // Hapus dari Firebase Database
                 db.ref('lists/' + listId).remove();
 
-                // Hapus dari LocalStorage
                 let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
                 history = history.filter(h => h.id !== listId);
                 localStorage.setItem('blistme_history', JSON.stringify(history));
 
-                // Jika daftar yang sedang dibuka dihapus, kembalikan ke Halaman Home
                 if (currentListId === listId) {
                     window.location.href = window.location.pathname;
                 } else {
@@ -740,6 +755,7 @@
         }, 300);
     }
 
+    /* ANIMASI TYPEWRITER "ME" */
     function playTitleTypewriterAnimation() {
         if (isAnimatingTitle) return;
         isAnimatingTitle = true;
@@ -765,15 +781,14 @@
                         clearInterval(typeInterval);
                         isAnimatingTitle = false;
                         currentJudul = textToType;
-                        simpanKeDatabase();
 
                         if (currentUser) {
                             inputJudul.classList.add('pulse-anim');
                         }
                     }
-                }, 70);
+                }, 60);
             }
-        }, 90);
+        }, 80);
     }
 
     function handleTitleClick() {
@@ -785,7 +800,6 @@
             inputJudul.value = '';
             currentJudul = '';
             inputJudul.classList.remove('pulse-anim');
-            simpanKeDatabase();
         }
     }
 
@@ -817,11 +831,6 @@
 
         const modal = document.getElementById('customModal');
         modal.classList.add('active');
-        
-        setTimeout(() => {
-            const el = document.getElementById('authUsername');
-            if (el) el.focus();
-        }, 150);
     }
 
     function handleAuthSubmit() {
@@ -881,6 +890,7 @@
     function logout() {
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
+        document.getElementById('inputItem').value = '';
         batalEdit();
         window.location.href = window.location.pathname;
     }
@@ -899,10 +909,10 @@
 
         if (navigator.clipboard) {
             navigator.clipboard.writeText(actualShareUrl).then(() => {
-                bukaModalPesan('Link Daftar Disalin!', '');
+                bukaModalPesan('Link Daftar Disalin', '');
             });
         } else {
-            bukaModalPesan('Link Daftar Disalin!', actualShareUrl);
+            bukaModalPesan('Link Daftar Disalin', actualShareUrl);
         }
     }
 
@@ -911,7 +921,7 @@
         const inputJudul = document.getElementById('appTitleInput');
         inputJudul.classList.remove('pulse-anim');
         currentJudul = inputJudul.value;
-        simpanKeDatabase();
+        if (dataList.length > 0) simpanKeDatabase();
     }
 
     function renderList() {
