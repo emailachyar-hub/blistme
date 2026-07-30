@@ -59,7 +59,7 @@
             width: 100%;
         }
 
-        /* LOGO "BLIST" (KLIKABLE KEMBALI KE HOME BERSIH) */
+        /* LOGO "BLIST" */
         .logo-bl {
             height: 40px;
             padding: 0 12px;
@@ -81,19 +81,27 @@
         
         /* Title & Save Button Wrapper */
         .title-wrapper {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            flex: 1;
             background: #f8fafc;
             border: 1.5px solid var(--border);
             border-radius: 10px;
-            padding: 2px 6px;
-            transition: border-color 0.2s;
+            padding: 2px 8px;
+            transition: all 0.2s ease;
+            width: auto;
+            max-width: 100%;
+        }
+        .title-wrapper.expanded {
+            display: flex;
+            flex: 1;
+            width: 100%;
         }
         .title-wrapper:focus-within {
             border-color: var(--primary);
             background: #ffffff;
+            width: 100%;
+            flex: 1;
         }
 
         .brand-title-input {
@@ -103,8 +111,14 @@
             border: none;
             background: transparent;
             outline: none;
-            width: 100%;
+            width: 45px; /* Default pas ukuran "ME" */
             padding: 4px;
+            transition: width 0.2s ease;
+        }
+        .title-wrapper.expanded .brand-title-input,
+        .title-wrapper:focus-within .brand-title-input {
+            width: 100%;
+            flex: 1;
         }
         
         .brand-title-input::placeholder {
@@ -116,7 +130,6 @@
             cursor: default;
         }
 
-        /* Tombol Konfirmasi Save Judul di Kanan */
         .btn-save-title {
             background: var(--primary);
             color: white;
@@ -131,7 +144,7 @@
         }
         .btn-save-title:active { transform: scale(0.95); }
 
-        /* USER & ACTION BAR (TIDAK BERHAMBURAN) */
+        /* USER & ACTION BAR */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
@@ -316,7 +329,7 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* POP-UP MODAL (POSISI TENGAH AMAN KEYBOARD HP) */
+        /* POP-UP MODAL */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -419,10 +432,10 @@
 
 <div class="app-container">
     <header>
-        <!-- Logo BLIST (Klik kembali ke Home bersih) + Input Judul (ME) + Tombol Save -->
+        <!-- Logo BLIST + Input Judul (ME) yang Dinamis Ukurannya -->
         <div class="brand-row">
             <div class="logo-bl" onclick="goHomeClean()" title="Kembali ke Beranda">BLIST</div>
-            <div class="title-wrapper">
+            <div class="title-wrapper" id="titleWrapper">
                 <input type="text" id="appTitleInput" class="brand-title-input" 
                        placeholder="ME"
                        oninput="onTitleTyping()" 
@@ -431,7 +444,7 @@
             </div>
         </div>
 
-        <!-- User Status & Menu Tertata Rapi -->
+        <!-- User Status Bar -->
         <div class="user-catchy-bar" id="authBar"></div>
     </header>
 
@@ -467,8 +480,8 @@
     </div>
 </div>
 
-<!-- POP-UP MODAL (AMAN KEYBOARD & TENGAH LAYAR) -->
-<div class="modal-overlay" id="customModal">
+<!-- POP-UP MODAL (AMAN KEYBOARD HP & TANPA TRIGGER PASSWORD) -->
+<div class="modal-overlay" id="customModal" autocomplete="off">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
             <div class="auth-tab active" id="tabSignIn" onclick="switchAuthMode('signin')">Sign In</div>
@@ -478,8 +491,8 @@
         <div class="modal-title" id="modalTitle">Konfirmasi</div>
         <div class="modal-body" id="modalBody"></div>
         <div class="modal-actions">
-            <button class="modal-btn btn-cancel-modal" id="modalBtnCancel" onclick="tutupModal()">Batal</button>
-            <button class="modal-btn btn-confirm" id="modalBtnConfirm">Ya</button>
+            <button type="button" class="modal-btn btn-cancel-modal" id="modalBtnCancel" onclick="tutupModal()">Batal</button>
+            <button type="button" class="modal-btn btn-confirm" id="modalBtnConfirm">Ya</button>
         </div>
     </div>
 </div>
@@ -588,7 +601,6 @@
         localStorage.setItem('blistme_history', JSON.stringify(history));
     }
 
-    // Reset list kosong saat halaman home dimuat ulang
     document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('inputItem').value = '';
         if (!urlParams.get('list') && !currentUser) {
@@ -603,6 +615,8 @@
 
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
+        const wrapper = document.getElementById('titleWrapper');
+        
         if (currentUser) {
             inputJudul.readOnly = false;
         } else {
@@ -611,6 +625,15 @@
 
         if (document.activeElement !== inputJudul) {
             inputJudul.value = currentJudul;
+        }
+
+        // Atur panjang input menyesuaikan teks agar background pas seukuran teks (+ sikit)
+        if (!currentUser || document.activeElement === inputJudul || (currentJudul && currentJudul.trim() !== '')) {
+            if (currentJudul && currentJudul.length > 0) {
+                inputJudul.style.width = Math.max(45, (currentJudul.length * 9.5)) + 'px';
+            } else {
+                inputJudul.style.width = '45px';
+            }
         }
     }
 
@@ -622,10 +645,10 @@
             authBar.innerHTML = `
                 <div class="user-info-pill" title="${currentUser}">👤 ${currentUser}</div>
                 <div class="header-actions">
-                    <button class="btn-header btn-h-new" onclick="buatLinkDaftarBaru()">Baru</button>
-                    <button class="btn-header btn-h-hist" onclick="bukaModalRiwayat()">Riwayat</button>
-                    <button class="btn-header btn-h-del" onclick="hapusDaftarAktif()">Hapus</button>
-                    <button class="btn-header btn-h-out" onclick="logout()">Keluar</button>
+                    <button type="button" class="btn-header btn-h-new" onclick="buatLinkDaftarBaru()">Baru</button>
+                    <button type="button" class="btn-header btn-h-hist" onclick="bukaModalRiwayat()">Riwayat</button>
+                    <button type="button" class="btn-header btn-h-del" onclick="hapusDaftarAktif()">Hapus</button>
+                    <button type="button" class="btn-header btn-h-out" onclick="logout()">Keluar</button>
                 </div>
             `;
             shareFloatingBar.style.display = 'flex';
@@ -633,8 +656,8 @@
             authBar.innerHTML = `
                 <div class="guest-badge">Mode Tamu</div>
                 <div class="header-actions">
-                    <button class="btn-header btn-h-acc" onclick="openAuthModal('signup')">Buat Akun</button>
-                    <button class="btn-header btn-h-login" onclick="openAuthModal('signin')">Masuk</button>
+                    <button type="button" class="btn-header btn-h-acc" onclick="openAuthModal('signup')">Buat Akun</button>
+                    <button type="button" class="btn-header btn-h-login" onclick="openAuthModal('signin')">Masuk</button>
                 </div>
             `;
             shareFloatingBar.style.display = 'none';
@@ -642,17 +665,18 @@
         renderJudul();
     }
 
-    // Kembali ke home bersih saat logo BLIST diklik
     function goHomeClean() {
         if (currentUser) {
             window.history.pushState({}, '', window.location.pathname);
             currentListId = getEffectiveListId();
             dataList = [];
             currentJudul = '';
+            document.getElementById('titleWrapper').classList.remove('expanded');
             renderList();
             document.getElementById('inputItem').value = '';
             document.getElementById('appTitleInput').value = '';
             renderJudul();
+            initRealtimeSync();
         } else {
             window.location.href = window.location.pathname;
         }
@@ -665,15 +689,29 @@
         currentListId = newSlug;
         dataList = [];
         currentJudul = '';
+        
+        // Simpan data list kosong baru ke database agar langsung sinkron & siap diisi
+        db.ref('lists/' + currentListId).set({
+            judul: '',
+            items: [],
+            updatedAt: new Date().toISOString()
+        });
+
+        document.getElementById('titleWrapper').classList.remove('expanded');
         renderList();
         document.getElementById('inputItem').value = '';
         document.getElementById('appTitleInput').value = '';
+        renderJudul();
+        initRealtimeSync();
     }
 
     function onTitleTyping() {
         if (!currentUser) return;
         const btnSave = document.getElementById('btnSaveTitle');
         btnSave.style.display = 'block';
+        
+        const inputJudul = document.getElementById('appTitleInput');
+        inputJudul.style.width = Math.max(45, (inputJudul.value.length * 9.5)) + 'px';
         
         clearTimeout(typingTimer);
         typingTimer = setTimeout(() => {}, 800);
@@ -730,7 +768,6 @@
         }
     }
 
-    // Format share WhatsApp dengan push pin (📌) dan titik dua (:) di akhir judul
     function shareDirectWhatsApp() {
         if (!currentUser) return;
         if (dataList.length === 0) {
@@ -772,7 +809,7 @@
                             <span class="history-title">${item.judul}</span>
                             <span class="history-meta">${item.itemCount} nama • ${item.time}</span>
                         </div>
-                        <button class="btn-hist-del" onclick="hapusRiwayat(event, '${item.id}')">Hapus</button>
+                        <button type="button" class="btn-hist-del" onclick="hapusRiwayat(event, '${item.id}')">Hapus</button>
                     </div>
                 `;
             });
@@ -820,6 +857,7 @@
 
     function openAuthModal(mode) {
         authMode = mode;
+        document.getElementById('titleWrapper').classList.add('expanded');
         document.getElementById('authTabs').style.display = 'flex';
         switchAuthMode(authMode);
     }
@@ -836,9 +874,10 @@
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
+        // Menggunakan atribut aman anti-password manager prompt
         modalBody.innerHTML = `
-            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="new-password" name="rand_user_${Math.random()}">
-            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" name="rand_pass_${Math.random()}">
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
         `;
 
         document.getElementById('modalBtnCancel').style.display = 'block';
@@ -906,6 +945,7 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         document.getElementById('inputItem').value = '';
+        document.getElementById('titleWrapper').classList.remove('expanded');
         dataList = [];
         batalEdit();
         window.location.href = window.location.pathname;
@@ -947,14 +987,14 @@
         if (selectedEditIndex !== null) {
             container.innerHTML = `
                 <div class="action-buttons">
-                    <button class="btn-touch btn-save" onclick="simpanEdit()">Simpan</button>
-                    <button class="btn-touch btn-delete" onclick="hapusSelectedItem()">Hapus</button>
-                    <button class="btn-touch btn-cancel" onclick="batalEdit()">Batal</button>
+                    <button type="button" class="btn-touch btn-save" onclick="simpanEdit()">Simpan</button>
+                    <button type="button" class="btn-touch btn-delete" onclick="hapusSelectedItem()">Hapus</button>
+                    <button type="button" class="btn-touch btn-cancel" onclick="batalEdit()">Batal</button>
                 </div>
             `;
         } else {
             container.innerHTML = `
-                <button class="btn-touch btn-add" onclick="tambahItem()">Tambahkan</button>
+                <button type="button" class="btn-touch btn-add" onclick="tambahItem()">Tambahkan</button>
             `;
         }
     }
