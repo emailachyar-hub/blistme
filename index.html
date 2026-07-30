@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- TAMBAHKAN KODE CSP INI -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline';">
+    <!-- KODE CSP DIPERBARUI DENGAN DOMAIN FIREBASE DATABASE -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://*.firebaseio.com https://*.firebasedatabase.app https://apis.google.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline';">
     
     <title>BLIST ME - blistme.com</title>
     <style>
-      /* ... kode CSS lainnya ... */
         :root {
             --primary: #0f766e;        
             --primary-hover: #115e59;
@@ -84,7 +83,6 @@
         }
         .logo-bl:active { transform: scale(0.95); }
         
-        /* Title & Save Button Container */
         .title-container {
             display: flex;
             align-items: center;
@@ -93,7 +91,6 @@
             min-width: 0;
         }
 
-        /* ANIMASI KEDAP-KEDIP & FADE */
         @keyframes glowingBox {
             0% { border-color: var(--primary); box-shadow: 0 0 4px var(--primary); background-color: #f0fdf4; }
             50% { border-color: #f59e0b; box-shadow: 0 0 14px rgba(245, 158, 11, 0.6); background-color: #fef3c7; }
@@ -148,7 +145,6 @@
         }
         .btn-save-title:active { transform: scale(0.95); }
 
-        /* USER & ACTION BAR */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
@@ -198,7 +194,6 @@
         .btn-h-acc { background: var(--primary); color: white; font-weight: 700; border: none; }
         .btn-h-login { background: transparent; color: var(--primary); text-decoration: underline; font-weight: 600; }
 
-        /* AREA DAFTAR NAMA */
         .list-area-wrapper {
             position: relative;
             flex: 1;
@@ -241,7 +236,6 @@
         .item-text { flex: 1; word-break: break-word; }
         .item-owner { font-size: 11px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
-        /* FLOATING SHARE BAR */
         .share-floating-bar {
             position: absolute;
             bottom: 8px;
@@ -298,7 +292,6 @@
 
         .stats { font-size: 12px; color: #64748b; margin-bottom: 6px; font-weight: 600; flex-shrink: 0; }
 
-        /* AREA INPUT NAMA */
         .input-section { flex-shrink: 0; margin-bottom: 4px; }
         .input-group { margin-bottom: 6px; }
         .input-group input {
@@ -333,7 +326,6 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* POP-UP MODAL */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -408,7 +400,6 @@
         .btn-cancel-modal { background: #f1f5f9; color: #475569; }
         .btn-confirm { background: var(--primary); color: white; }
 
-        /* Item Riwayat */
         .history-list { display: flex; flex-direction: column; gap: 6px; }
         .history-item {
             display: flex;
@@ -436,7 +427,6 @@
 
 <div class="app-container">
     <header>
-        <!-- Logo BLIST + Input Judul -->
         <div class="brand-row">
             <div class="logo-bl" onclick="goHomeClean()" title="Kembali ke Beranda">BLIST</div>
             <div class="title-container">
@@ -449,17 +439,14 @@
             </div>
         </div>
 
-        <!-- User Status Bar -->
         <div class="user-catchy-bar" id="authBar"></div>
     </header>
 
-    <!-- Area Daftar Nama -->
     <div class="list-area-wrapper">
         <div class="list-area" id="listArea">
             <ul id="daftarList"></ul>
         </div>
 
-        <!-- Floating Share Bar -->
         <div class="share-floating-bar" id="shareFloatingBar" style="display: none;">
             <div class="single-share-container">
                 <button class="btn-main-copy" onclick="copyListLinkWithState()">
@@ -476,7 +463,6 @@
         Total: <strong id="totalItem">0</strong> nama
     </div>
 
-    <!-- Area Input Nama -->
     <div class="input-section" id="inputSection">
         <div class="input-group">
             <input type="text" id="inputItem" placeholder="Ketik nama di sini..." onkeypress="handleEnter(event)" onfocus="autoScrollForKeyboard()" autocomplete="off">
@@ -485,7 +471,6 @@
     </div>
 </div>
 
-<!-- POP-UP MODAL -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -502,7 +487,6 @@
     </div>
 </div>
 
-<!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 
@@ -897,7 +881,6 @@
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
-        // PERBAIKAN: Input dibuat normal tanpa atribut readonly bawaan yang sering memicu error klik di mobile
         modalBody.innerHTML = `
             <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off">
             <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="current-password">
@@ -910,6 +893,7 @@
         modal.classList.add('active');
     }
 
+    /* DIPERBAIKI: MENGGUNAKAN .once('value') SESUAI SPESIFIKASI FIREBASE COMPAT SDK */
     async function handleAuthSubmit() {
         const usernameInput = document.getElementById('authUsername').value.trim();
         const passwordInput = document.getElementById('authPassword').value.trim();
@@ -924,7 +908,7 @@
         const hashedPassword = await hashPassword(passwordInput);
 
         if (authMode === 'signup') {
-            userRef.get().then(async (snapshot) => {
+            userRef.once('value').then(async (snapshot) => {
                 if (snapshot.exists()) {
                     bukaModalPesan('Gagal', 'Username sudah terdaftar!');
                 } else {
@@ -942,9 +926,11 @@
                     tutupModal();
                     triggerWelcomeAnimation();
                 }
+            }).catch((error) => {
+                bukaModalPesan('Error', 'Gagal terhubung ke database: ' + error.message);
             });
         } else {
-            userRef.get().then(async (snapshot) => {
+            userRef.once('value').then(async (snapshot) => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     if (userData.password === hashedPassword) {
@@ -961,6 +947,8 @@
                 } else {
                     bukaModalPesan('Gagal', 'Akun tidak ditemukan. Silakan Sign Up!');
                 }
+            }).catch((error) => {
+                bukaModalPesan('Error', 'Gagal terhubung ke database: ' + error.message);
             });
         }
     }
