@@ -88,7 +88,16 @@
             min-width: 0;
         }
 
-        /* Input Judul (Tampilan Normal Kembali) */
+        /* ANIMASI KEDAP-KEDIP & FADE */
+        @keyframes glowingBox {
+            0% { border-color: var(--primary); box-shadow: 0 0 4px var(--primary); background-color: #f0fdf4; }
+            50% { border-color: #f59e0b; box-shadow: 0 0 14px rgba(245, 158, 11, 0.6); background-color: #fef3c7; }
+            100% { border-color: var(--primary); box-shadow: 0 0 4px var(--primary); background-color: #f0fdf4; }
+        }
+        .glow-blink {
+            animation: glowingBox 1.2s infinite ease-in-out;
+        }
+
         .brand-title-input {
             font-size: 16px;
             font-weight: 700;
@@ -100,17 +109,19 @@
             padding: 6px 10px;
             flex: 1;
             width: 100%;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
         
         .brand-title-input:focus {
             background: #ffffff;
             border-color: var(--primary);
+            box-shadow: none;
         }
         
         .brand-title-input::placeholder {
             color: rgba(15, 23, 42, 0.4);
             font-weight: 600;
+            transition: opacity 0.3s ease;
         }
 
         .brand-title-input:read-only {
@@ -427,6 +438,7 @@
                 <input type="text" id="appTitleInput" class="brand-title-input" 
                        placeholder="ME"
                        oninput="onTitleTyping()" 
+                       onfocus="handleTitleFocus()"
                        autocomplete="off">
                 <button id="btnSaveTitle" class="btn-save-title" style="display: none;" onclick="confirmSaveTitle()">Simpan</button>
             </div>
@@ -541,6 +553,14 @@
         return 'blistme_history_' + userKey;
     }
 
+    /* KEAMANAN: HASH PASSWORD DENGAN SHA-256 (MENCEGAH PLAIN-TEXT DI DATABASE) */
+    async function hashPassword(password) {
+        const msgBuffer = new TextEncoder().encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
     /* REALTIME SYNC DATABASE */
     function initRealtimeSync() {
         if (currentRefListener) {
@@ -606,6 +626,26 @@
     initRealtimeSync();
     renderAuthBar();
     renderInputActions();
+
+    function triggerWelcomeAnimation() {
+        const titleInput = document.getElementById('appTitleInput');
+        titleInput.classList.add('glow-blink');
+        
+        setTimeout(() => {
+            if (!currentJudul || currentJudul === '') {
+                titleInput.value = '';
+                titleInput.placeholder = 'ketik judul daftar disini...';
+            }
+        }, 3000);
+    }
+
+    function handleTitleFocus() {
+        const titleInput = document.getElementById('appTitleInput');
+        titleInput.classList.remove('glow-blink');
+        if (titleInput.placeholder === 'ketik judul daftar disini...') {
+            titleInput.placeholder = 'ME';
+        }
+    }
 
     function renderJudul() {
         const inputJudul = document.getElementById('appTitleInput');
@@ -684,6 +724,9 @@
         document.getElementById('appTitleInput').value = '';
         renderJudul();
         initRealtimeSync();
+
+        // Aktifkan animasi kedap-kedip saat buat daftar baru
+        triggerWelcomeAnimation();
     }
 
     function onTitleTyping() {
@@ -863,7 +906,7 @@
         modal.classList.add('active');
     }
 
-    function handleAuthSubmit() {
+    async function handleAuthSubmit() {
         const usernameInput = document.getElementById('authUsername').value.trim();
         const passwordInput = document.getElementById('authPassword').value.trim();
 
@@ -874,39 +917,42 @@
 
         const userKey = usernameInput.toLowerCase().replace(/[^a-z0-9]/g, '_');
         const userRef = db.ref('users/' + userKey);
+        const hashedPassword = await hashPassword(passwordInput);
 
         if (authMode === 'signup') {
-            userRef.get().then((snapshot) => {
+            userRef.get().then(async (snapshot) => {
                 if (snapshot.exists()) {
                     bukaModalPesan('Gagal', 'Username sudah terdaftar!');
                 } else {
-                    userRef.set({
+                    await userRef.set({
                         username: usernameInput,
-                        password: passwordInput,
+                        password: hashedPassword,
                         createdAt: new Date().toISOString()
-                    }).then(() => {
-                        currentUser = usernameInput;
-                        localStorage.setItem('buatlist_currentUser', currentUser);
-                        dataList = [];
-                        currentListId = getEffectiveListId();
-                        initRealtimeSync();
-                        renderAuthBar();
-                        bukaModalPesan('Berhasil', 'Akun berhasil dibuat!');
                     });
+                    currentUser = usernameInput;
+                    localStorage.setItem('buatlist_currentUser', currentUser);
+                    dataList = [];
+                    currentListId = getEffectiveListId();
+                    initRealtimeSync();
+                    renderAuthBar();
+                    tutupModal();
+                    
+                    // Panggil animasi kedap-kedip saat pertama kali daftar akun baru
+                    triggerWelcomeAnimation();
                 }
             });
         } else {
-            userRef.get().then((snapshot) => {
+            userRef.get().then(async (snapshot) => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
-                    if (userData.password === passwordInput) {
+                    if (userData.password === hashedPassword) {
                         currentUser = userData.username || usernameInput;
                         localStorage.setItem('buatlist_currentUser', currentUser);
                         dataList = [];
                         currentListId = getEffectiveListId();
                         initRealtimeSync();
                         renderAuthBar();
-                        bukaModalPesan('Berhasil', `Selamat datang, ${currentUser}!`);
+                        tutupModal();
                     } else {
                         bukaModalPesan('Gagal', 'Password salah!');
                     }
