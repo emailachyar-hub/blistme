@@ -88,7 +88,7 @@
             min-width: 0;
         }
 
-        /* Input Judul dengan Background yang Pas di Huruf ME Saja */
+        /* Input Judul (Tampilan Normal Kembali) */
         .brand-title-input {
             font-size: 16px;
             font-weight: 700;
@@ -98,14 +98,12 @@
             border-radius: 10px;
             outline: none;
             padding: 6px 10px;
-            width: 50px; /* Pas ukuran "ME" */
+            flex: 1;
+            width: 100%;
             transition: all 0.2s ease;
         }
         
-        .brand-title-input.expanded,
         .brand-title-input:focus {
-            width: 100%;
-            flex: 1;
             background: #ffffff;
             border-color: var(--primary);
         }
@@ -422,7 +420,7 @@
 
 <div class="app-container">
     <header>
-        <!-- Logo BLIST + Input Judul (ME) yang Background Kotaknya Khusus Huruf Saja -->
+        <!-- Logo BLIST + Input Judul -->
         <div class="brand-row">
             <div class="logo-bl" onclick="goHomeClean()" title="Kembali ke Beranda">BLIST</div>
             <div class="title-container">
@@ -470,7 +468,7 @@
     </div>
 </div>
 
-<!-- POP-UP MODAL (AMAN KEYBOARD HP & TANPA TRIGGER PASSWORD) -->
+<!-- POP-UP MODAL -->
 <div class="modal-overlay" id="customModal" autocomplete="off">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -534,11 +532,9 @@
     let selectedEditIndex = null;
     let authMode = 'signin';
     let currentRefListener = null;
-    let typingTimer = null;
 
     function getActiveUser() { return currentUser || guestId; }
 
-    // Fungsi untuk mendapatkan Key Riwayat unik berdasarkan akun yang aktif
     function getHistoryKey() {
         if (!currentUser) return 'blistme_history_guest';
         const userKey = currentUser.toLowerCase().replace(/[^a-z0-9]/g, '_');
@@ -623,14 +619,6 @@
         if (document.activeElement !== inputJudul) {
             inputJudul.value = currentJudul;
         }
-
-        if (!currentUser || document.activeElement === inputJudul || (currentJudul && currentJudul.trim() !== '')) {
-            if (currentJudul && currentJudul.length > 0) {
-                inputJudul.style.width = Math.max(50, (currentJudul.length * 10)) + 'px';
-            } else {
-                inputJudul.style.width = '50px';
-            }
-        }
     }
 
     function renderAuthBar() {
@@ -667,7 +655,6 @@
             currentListId = getEffectiveListId();
             dataList = [];
             currentJudul = '';
-            document.getElementById('appTitleInput').classList.remove('expanded');
             renderList();
             document.getElementById('inputItem').value = '';
             document.getElementById('appTitleInput').value = '';
@@ -692,7 +679,6 @@
             updatedAt: new Date().toISOString()
         });
 
-        document.getElementById('appTitleInput').classList.remove('expanded');
         renderList();
         document.getElementById('inputItem').value = '';
         document.getElementById('appTitleInput').value = '';
@@ -704,12 +690,6 @@
         if (!currentUser) return;
         const btnSave = document.getElementById('btnSaveTitle');
         btnSave.style.display = 'block';
-        
-        const inputJudul = document.getElementById('appTitleInput');
-        inputJudul.style.width = Math.max(50, (inputJudul.value.length * 10)) + 'px';
-        
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(() => {}, 800);
     }
 
     function confirmSaveTitle() {
@@ -855,7 +835,6 @@
 
     function openAuthModal(mode) {
         authMode = mode;
-        document.getElementById('appTitleInput').classList.add('expanded');
         document.getElementById('authTabs').style.display = 'flex';
         switchAuthMode(authMode);
     }
@@ -942,7 +921,6 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         document.getElementById('inputItem').value = '';
-        document.getElementById('appTitleInput').classList.remove('expanded');
         dataList = [];
         batalEdit();
         window.location.href = window.location.pathname;
