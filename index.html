@@ -177,7 +177,7 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
         .btn-header {
             padding: 6px 10px;
@@ -332,7 +332,7 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* POP-UP MODAL */
+        /* POP-UP MODAL YANG DIPERBAIKI */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -342,11 +342,16 @@
             align-items: center; 
             padding: 14px;
             opacity: 0;
+            visibility: hidden;
             pointer-events: none;
-            transition: opacity 0.2s ease;
-            z-index: 9999;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            z-index: 99999;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible;
+            pointer-events: auto; 
+        }
         .modal-card {
             background: var(--surface);
             width: 100%;
@@ -357,7 +362,7 @@
             max-height: 85vh;
             display: flex;
             flex-direction: column;
-            z-index: 10000;
+            z-index: 100000;
         }
         
         .auth-tabs {
@@ -393,6 +398,7 @@
             border-radius: 8px;
             font-size: 14px;
             outline: none;
+            background: #ffffff;
         }
         .modal-input:focus { border-color: var(--primary); }
         .modal-actions { display: flex; gap: 6px; }
@@ -486,7 +492,7 @@
 </div>
 
 <!-- POP-UP MODAL -->
-<div class="modal-overlay" id="customModal" autocomplete="off">
+<div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
             <div class="auth-tab active" id="tabSignIn" onclick="switchAuthMode('signin')">Sign In</div>
@@ -879,14 +885,19 @@
 
     function openAuthModal(mode) {
         authMode = mode;
-        document.getElementById('authTabs').style.display = 'flex';
+        const authTabsEl = document.getElementById('authTabs');
+        if (authTabsEl) authTabsEl.style.display = 'flex';
         switchAuthMode(authMode);
     }
 
     function switchAuthMode(mode) {
         authMode = mode;
-        document.getElementById('tabSignIn').className = `auth-tab ${mode === 'signin' ? 'active' : ''}`;
-        document.getElementById('tabSignUp').className = `auth-tab ${mode === 'signup' ? 'active' : ''}`;
+        const tabSignIn = document.getElementById('tabSignIn');
+        const tabSignUp = document.getElementById('tabSignUp');
+        if (tabSignIn && tabSignUp) {
+            tabSignIn.className = `auth-tab ${mode === 'signin' ? 'active' : ''}`;
+            tabSignUp.className = `auth-tab ${mode === 'signup' ? 'active' : ''}`;
+        }
 
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
@@ -896,8 +907,8 @@
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
         modalBody.innerHTML = `
-            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
-            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
+            <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="off">
+            <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="current-password">
         `;
 
         document.getElementById('modalBtnCancel').style.display = 'block';
@@ -908,8 +919,13 @@
     }
 
     async function handleAuthSubmit() {
-        const usernameInput = document.getElementById('authUsername').value.trim();
-        const passwordInput = document.getElementById('authPassword').value.trim();
+        const usernameInputEl = document.getElementById('authUsername');
+        const passwordInputEl = document.getElementById('authPassword');
+
+        if (!usernameInputEl || !passwordInputEl) return;
+
+        const usernameInput = usernameInputEl.value.trim();
+        const passwordInput = passwordInputEl.value.trim();
 
         if (!usernameInput || !passwordInput) {
             bukaModalPesan('Peringatan', 'Username dan Password wajib diisi!');
@@ -1100,6 +1116,7 @@
         
         const btnConfirm = document.getElementById('modalBtnConfirm');
         btnConfirm.innerText = 'OK';
+        document.getElementById('modalBtnCancel').style.display = 'block';
         document.getElementById('modalBtnCancel').style.display = 'none';
         btnConfirm.onclick = tutupModal;
 
