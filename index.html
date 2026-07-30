@@ -6,9 +6,11 @@
     <title>BLIST ME - blistme.com</title>
     <style>
         :root {
-            --primary: #4f46e5;        /* Tema Utama Indigo Modern */
-            --primary-hover: #4338ca;
-            --primary-light: #eef2ff;
+            /* Harmonisasi Tema Warna Emerald Teal */
+            --primary: #0f766e;        
+            --primary-hover: #115e59;
+            --primary-light: #f0fdf4;  
+            --primary-border: #bbf7d0;
             --wa-color: #25d366;
             --bg: #f8fafc;
             --surface: #ffffff;
@@ -37,12 +39,12 @@
             flex-direction: column;
             height: 100vh;
             height: 100dvh;
-            padding: 16px 16px 24px 16px; /* Jarak bawah diperbesar untuk HP */
+            padding: 16px 16px 24px 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
             position: relative;
         }
 
-        /* HEADER LAYOUT BARU */
+        /* HEADER LAYOUT */
         header { 
             margin-bottom: 12px; 
             flex-shrink: 0; 
@@ -51,7 +53,7 @@
             gap: 10px;
         }
 
-        /* Baris Top: Logo & Title Input (Full Width, Tidak Tertutup) */
+        /* Baris Top: Logo & Input Judul Utama */
         .brand-row {
             display: flex;
             align-items: center;
@@ -59,11 +61,10 @@
             width: 100%;
         }
 
-        /* Logo BLIST Khas Emerald (Tetap Menjolok) */
         .logo-bl {
             height: 44px;
             padding: 0 16px;
-            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             border-radius: 12px;
             font-weight: 900;
@@ -72,7 +73,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             flex-shrink: 0;
@@ -98,31 +99,31 @@
             box-shadow: none !important;
         }
 
-        /* Animasi Kedap-Kedip */
+        /* Animasi Glow Pulse */
         .brand-title-input.pulse-anim {
             animation: glowPulse 1.8s infinite ease-in-out;
         }
         @keyframes glowPulse {
-            0% { border-color: rgba(79, 70, 229, 0.2); box-shadow: 0 0 0 rgba(79, 70, 229, 0); }
-            50% { border-color: var(--primary); box-shadow: 0 0 10px rgba(79, 70, 229, 0.35); }
-            100% { border-color: rgba(79, 70, 229, 0.2); box-shadow: 0 0 0 rgba(79, 70, 229, 0); }
+            0% { border-color: rgba(15, 118, 110, 0.2); box-shadow: 0 0 0 rgba(15, 118, 110, 0); }
+            50% { border-color: var(--primary); box-shadow: 0 0 10px rgba(15, 118, 110, 0.3); }
+            100% { border-color: rgba(15, 118, 110, 0.2); box-shadow: 0 0 0 rgba(15, 118, 110, 0); }
         }
 
-        /* Baris User Catchy (User Badge, Riwayat, Logout) */
+        /* Sub-Bar Akun & Status */
         .user-catchy-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: var(--primary-light);
-            padding: 6px 12px;
+            padding: 8px 12px;
             border-radius: 12px;
-            border: 1px solid #e0e7ff;
+            border: 1px solid var(--primary-border);
         }
         .user-pill {
             display: flex;
             align-items: center;
             gap: 6px;
-            max-width: 150px;
+            max-width: 130px;
         }
         .user-badge {
             font-size: 12px;
@@ -132,29 +133,40 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .guest-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #047857;
+            background: #dcfce7;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
         .auth-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
         .btn-auth {
-            padding: 6px 10px;
+            padding: 6px 9px;
             border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             border: 1px solid transparent;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }
-        .btn-history-menu { background: #ffffff; color: var(--primary); border-color: #c7d2fe; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .btn-sign-in { background: var(--primary); color: white; }
+        .btn-new-list { background: var(--primary); color: white; font-weight: 700; border: none; }
+        .btn-history-menu { background: #ffffff; color: var(--primary); border-color: #a7f3d0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .btn-create-acc { background: var(--primary); color: white; border: none; font-weight: 700; }
+        .btn-login-link { background: transparent; color: var(--primary); text-decoration: underline; font-weight: 600; padding: 4px 6px; }
         .btn-logout { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
 
-        /* Tombol Salin Link Header */
+        /* Tombol Salin Link */
         .share-bar { display: none; }
         .btn-copy-link {
             width: 100%;
-            background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
             color: white;
             border: none;
             padding: 9px 14px;
@@ -166,7 +178,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            box-shadow: 0 3px 10px rgba(79, 70, 229, 0.25);
+            box-shadow: 0 3px 10px rgba(15, 118, 110, 0.25);
         }
         .btn-copy-link:active { transform: scale(0.98); }
 
@@ -212,7 +224,7 @@
         }
         
         .item-text { flex: 1; word-break: break-word; }
-        .item-owner { font-size: 12px; color: #94a3b8; margin-left: 8px; font-weight: 400; }
+        .item-owner { font-size: 12px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
         /* Tombol Share Floating */
         .btn-share-floating {
@@ -236,10 +248,10 @@
 
         .stats { font-size: 13px; color: #64748b; margin-bottom: 8px; font-weight: 600; flex-shrink: 0; }
 
-        /* AREA INPUT NAMA (Dinaikkan Agar Tidak Ketutupan Keyboard) */
+        /* Area Input Nama */
         .input-section { 
             flex-shrink: 0; 
-            margin-bottom: 10px; /* Space ekstra dari bawah screen */
+            margin-bottom: 10px;
         }
         .input-group { margin-bottom: 10px; }
         .input-group input {
@@ -271,24 +283,27 @@
             transition: transform 0.1s ease;
         }
         .btn-touch:active { transform: scale(0.98); }
-        .btn-add { background: var(--primary); color: white; width: 100%; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-add { background: var(--primary); color: white; width: 100%; box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3); }
         .btn-save { background: var(--primary); color: white; }
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* Modal Pop-In */
+        /* MODAL OVERLAY - DINAIKKAN AGAR TIDAK KETUTUPAN KEYBOARD HP */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Mengubah penjajaran ke atas */
+            padding-top: 12vh;       /* Memberi ruang ruang atas yang cukup tinggi */
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 1000;
-            padding: 16px;
+            padding-left: 16px;
+            padding-right: 16px;
+            overflow-y: auto;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card {
@@ -297,14 +312,14 @@
             max-width: 340px;
             padding: 20px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            transform: scale(0.9);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            transform: translateY(-20px);
             transition: transform 0.2s ease;
             max-height: 80vh;
             display: flex;
             flex-direction: column;
         }
-        .modal-overlay.active .modal-card { transform: scale(1); }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
         
         .auth-tabs {
             display: flex;
@@ -333,10 +348,10 @@
         .modal-body { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; overflow-y: auto; }
         .modal-input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
         }
         .modal-input:focus { border-color: var(--primary); }
@@ -353,7 +368,7 @@
         .btn-cancel-modal { background: #f1f5f9; color: #475569; }
         .btn-confirm { background: var(--primary); color: white; }
 
-        /* Item Riwayat (Judul Klik-able) */
+        /* Item Riwayat */
         .history-list { display: flex; flex-direction: column; gap: 8px; }
         .history-item {
             display: flex;
@@ -372,7 +387,7 @@
             gap: 2px; 
             text-align: left; 
             flex: 1;
-            cursor: pointer; /* Langsung Klik-able */
+            cursor: pointer;
             padding-right: 8px;
         }
         .history-title { font-size: 14px; font-weight: 700; color: var(--primary); }
@@ -402,7 +417,7 @@
                    onfocus="handleTitleClick()">
         </div>
 
-        <!-- Baris 2: Sub-Bar Catchy Akun & Riwayat -->
+        <!-- Baris 2: Sub-Bar Status Akun & Tombol Aksi -->
         <div class="user-catchy-bar" id="authBar"></div>
 
         <!-- Baris 3: Tombol Copy Link -->
@@ -427,7 +442,7 @@
         Total: <strong id="totalItem">0</strong> nama
     </div>
 
-    <!-- Area Input Nama (Mudah Terjangkau Saat Keyboard Naik) -->
+    <!-- Area Input Nama -->
     <div class="input-section" id="inputSection">
         <div class="input-group">
             <input type="text" id="inputItem" placeholder="Ketik nama di sini..." onkeypress="handleEnter(event)" onfocus="autoScrollForKeyboard()">
@@ -436,7 +451,7 @@
     </div>
 </div>
 
-<!-- MODAL CONTAINER -->
+<!-- MODAL POP-UP (Naiik Ke Atas) -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -482,10 +497,10 @@
     localStorage.setItem('buatlist_guestId', guestId);
 
     const urlParams = new URLSearchParams(window.location.search);
+    const listFromUrl = urlParams.get('list');
     let currentUser = localStorage.getItem('buatlist_currentUser') || null;
 
     function getEffectiveListId() {
-        const listFromUrl = urlParams.get('list');
         if (listFromUrl) return listFromUrl;
         if (currentUser) {
             const userKey = currentUser.toLowerCase().replace(/[^a-z0-9]/g, '_');
@@ -500,15 +515,25 @@
     let selectedEditIndex = null;
     let authMode = 'signin';
     let isAnimatingTitle = false;
+    let currentRefListener = null;
 
     function getActiveUser() { return currentUser || guestId; }
 
+    /* REALTIME SYNC */
     function initRealtimeSync() {
+        if (currentRefListener) {
+            db.ref('lists/' + currentListId).off('value', currentRefListener);
+        }
+
         const listRef = db.ref('lists/' + currentListId);
-        listRef.on('value', (snapshot) => {
+        currentRefListener = listRef.on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
-                currentJudul = data.judul || 'ME';
+                if (!listFromUrl) {
+                    currentJudul = (currentUser && data.judul && data.judul !== 'ketik judul disini...') ? data.judul : 'ME';
+                } else {
+                    currentJudul = data.judul || 'ME';
+                }
                 dataList = data.items || [];
             } else {
                 currentJudul = 'ME';
@@ -566,7 +591,7 @@
         }
 
         if (document.activeElement !== inputJudul && !isAnimatingTitle) {
-            if (!currentUser && (currentJudul === 'ketik judul disini...' || !currentJudul || !currentJudul.trim())) {
+            if (!listFromUrl && (!currentUser || currentJudul === 'ketik judul disini...' || !currentJudul || !currentJudul.trim())) {
                 inputJudul.value = 'ME';
             } else {
                 inputJudul.value = currentJudul;
@@ -574,7 +599,7 @@
         }
     }
 
-    /* RENDER AUTH BAR CATCHY */
+    /* RENDER AUTH BAR (DENGAN FITUR BUAT BARU / NEW LIST) */
     function renderAuthBar() {
         const authBar = document.getElementById('authBar');
         const shareBar = document.getElementById('shareBar');
@@ -587,6 +612,7 @@
                     <span class="user-badge">${currentUser}</span>
                 </div>
                 <div class="auth-actions">
+                    <button class="btn-auth btn-new-list" onclick="buatLinkDaftarBaru()">➕ Buat Baru</button>
                     <button class="btn-auth btn-history-menu" onclick="bukaModalRiwayat()">📜 Riwayat</button>
                     <button class="btn-auth btn-logout" onclick="logout()">Logout</button>
                 </div>
@@ -595,8 +621,13 @@
             if (btnShareFloating) btnShareFloating.style.display = 'flex';
         } else {
             authBar.innerHTML = `
-                <span style="font-size: 12px; color: #64748b; font-weight: 500;">Modus Tamu</span>
-                <button class="btn-auth btn-sign-in" onclick="openAuthModal('signin')">Sign In</button>
+                <div class="user-pill">
+                    <span class="guest-label">Akun Tamu</span>
+                </div>
+                <div class="auth-actions">
+                    <button class="btn-auth btn-create-acc" onclick="openAuthModal('signup')">Coba Buat Akun 🚀</button>
+                    <button class="btn-auth btn-login-link" onclick="openAuthModal('signin')">Masuk</button>
+                </div>
             `;
             shareBar.style.display = 'none';
             if (btnShareFloating) btnShareFloating.style.display = 'none';
@@ -604,7 +635,13 @@
         renderJudul();
     }
 
-    /* WATERMARK DIPERBARUI KE blistme.com */
+    /* FITUR BUAT DAFTAR/LINK BARU */
+    function buatLinkDaftarBaru() {
+        if (!currentUser) return;
+        const newSlug = Math.random().toString(36).substring(2, 7);
+        window.location.href = window.location.pathname + '?list=' + newSlug;
+    }
+
     function shareDaftarTeks() {
         if (!currentUser) return;
         if (dataList.length === 0) {
@@ -631,7 +668,6 @@
         }
     }
 
-    /* Buka Riwayat (Klik Nama Judul Langsung Terbuka) */
     function bukaModalRiwayat() {
         if (!currentUser) return;
         document.getElementById('authTabs').style.display = 'none';
@@ -671,16 +707,31 @@
     }
 
     function muatRiwayat(listId) {
-        currentListId = listId;
-        initRealtimeSync();
-        tutupModal();
+        window.location.href = window.location.pathname + '?list=' + listId;
     }
 
+    /* HAPUS LINK DAFTAR LENGKAP REALTIME */
     function hapusRiwayat(listId) {
-        let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
-        history = history.filter(h => h.id !== listId);
-        localStorage.setItem('blistme_history', JSON.stringify(history));
-        bukaModalRiwayat();
+        bukaModalCustom({
+            judul: 'Hapus daftar ini selamanya?',
+            kataTombol: 'Hapus',
+            onConfirm: () => {
+                // Hapus dari Firebase Database
+                db.ref('lists/' + listId).remove();
+
+                // Hapus dari LocalStorage
+                let history = JSON.parse(localStorage.getItem('blistme_history') || '[]');
+                history = history.filter(h => h.id !== listId);
+                localStorage.setItem('blistme_history', JSON.stringify(history));
+
+                // Jika daftar yang sedang dibuka dihapus, kembalikan ke Halaman Home
+                if (currentListId === listId) {
+                    window.location.href = window.location.pathname;
+                } else {
+                    bukaModalRiwayat();
+                }
+            }
+        });
     }
 
     function autoScrollForKeyboard() {
@@ -766,10 +817,11 @@
 
         const modal = document.getElementById('customModal');
         modal.classList.add('active');
+        
         setTimeout(() => {
             const el = document.getElementById('authUsername');
             if (el) el.focus();
-        }, 100);
+        }, 150);
     }
 
     function handleAuthSubmit() {
@@ -830,9 +882,7 @@
         currentUser = null;
         localStorage.removeItem('buatlist_currentUser');
         batalEdit();
-        currentListId = getEffectiveListId();
-        initRealtimeSync();
-        renderAuthBar();
+        window.location.href = window.location.pathname;
     }
 
     function copyListLink() {
