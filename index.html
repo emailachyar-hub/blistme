@@ -59,7 +59,7 @@
             width: 100%;
         }
 
-        /* LOGO HANYA "BLIST" */
+        /* LOGO "BLIST" (KLIKABLE KEMBALI KE HOME BERSIH) */
         .logo-bl {
             height: 40px;
             padding: 0 12px;
@@ -74,7 +74,10 @@
             justify-content: center;
             box-shadow: 0 3px 10px rgba(5, 150, 105, 0.25);
             flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
+        .logo-bl:active { transform: scale(0.95); }
         
         /* Title & Save Button Wrapper */
         .title-wrapper {
@@ -221,7 +224,7 @@
         .item-text { flex: 1; word-break: break-word; }
         .item-owner { font-size: 11px; color: #64748b; margin-left: 8px; font-weight: 400; }
 
-        /* FLOATING SHARE BAR (SATU TOMBOL UTAMA + WHATSAPP) */
+        /* FLOATING SHARE BAR */
         .share-floating-bar {
             position: absolute;
             bottom: 8px;
@@ -313,21 +316,19 @@
         .btn-delete { background: #ef4444; color: white; }
         .btn-cancel { background: #e2e8f0; color: #334155; }
 
-        /* POP-UP MODAL (AMAN KEYBOARD HP & POSISI PAS) */
+        /* POP-UP MODAL (POSISI TENGAH AMAN KEYBOARD HP) */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
-            align-items: flex-end; 
-            padding-bottom: 30px;
+            align-items: center; 
+            padding: 14px;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
             z-index: 1000;
-            padding-left: 14px;
-            padding-right: 14px;
             overflow-y: auto;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
@@ -337,14 +338,11 @@
             max-width: 400px;
             padding: 18px;
             border-radius: 18px;
-            box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
-            transform: translateY(20px);
-            transition: transform 0.2s ease;
-            max-height: 75vh;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.15);
+            max-height: 85vh;
             display: flex;
             flex-direction: column;
         }
-        .modal-overlay.active .modal-card { transform: translateY(0); }
         
         .auth-tabs {
             display: flex;
@@ -421,9 +419,9 @@
 
 <div class="app-container">
     <header>
-        <!-- Baris 1: Logo Kotak (BLIST) + Input Judul (ME) + Tombol Save Judul -->
+        <!-- Logo BLIST (Klik kembali ke Home bersih) + Input Judul (ME) + Tombol Save -->
         <div class="brand-row">
-            <div class="logo-bl">BLIST</div>
+            <div class="logo-bl" onclick="goHomeClean()" title="Kembali ke Beranda">BLIST</div>
             <div class="title-wrapper">
                 <input type="text" id="appTitleInput" class="brand-title-input" 
                        placeholder="ME"
@@ -433,7 +431,7 @@
             </div>
         </div>
 
-        <!-- Baris 2: User Status & Menu Tertata Rapi -->
+        <!-- User Status & Menu Tertata Rapi -->
         <div class="user-catchy-bar" id="authBar"></div>
     </header>
 
@@ -443,7 +441,7 @@
             <ul id="daftarList"></ul>
         </div>
 
-        <!-- Floating Share Bar: Salin Link (Tersalin) & WhatsApp -->
+        <!-- Floating Share Bar -->
         <div class="share-floating-bar" id="shareFloatingBar" style="display: none;">
             <div class="single-share-container">
                 <button class="btn-main-copy" onclick="copyListLinkWithState()">
@@ -469,7 +467,7 @@
     </div>
 </div>
 
-<!-- POP-UP MODAL (BAWAH LAYAR & AMAN KEYBOARD) -->
+<!-- POP-UP MODAL (AMAN KEYBOARD & TENGAH LAYAR) -->
 <div class="modal-overlay" id="customModal">
     <div class="modal-card">
         <div class="auth-tabs" id="authTabs" style="display: none;">
@@ -644,6 +642,22 @@
         renderJudul();
     }
 
+    // Kembali ke home bersih saat logo BLIST diklik
+    function goHomeClean() {
+        if (currentUser) {
+            window.history.pushState({}, '', window.location.pathname);
+            currentListId = getEffectiveListId();
+            dataList = [];
+            currentJudul = '';
+            renderList();
+            document.getElementById('inputItem').value = '';
+            document.getElementById('appTitleInput').value = '';
+            renderJudul();
+        } else {
+            window.location.href = window.location.pathname;
+        }
+    }
+
     function buatLinkDaftarBaru() {
         if (!currentUser) return;
         const newSlug = Math.random().toString(36).substring(2, 7);
@@ -662,9 +676,7 @@
         btnSave.style.display = 'block';
         
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(() => {
-            // Berhenti mengetik, tombol konfirmasi save tetap ada agar user bisa klik
-        }, 800);
+        typingTimer = setTimeout(() => {}, 800);
     }
 
     function confirmSaveTitle() {
@@ -718,6 +730,7 @@
         }
     }
 
+    // Format share WhatsApp dengan push pin (📌) dan titik dua (:) di akhir judul
     function shareDirectWhatsApp() {
         if (!currentUser) return;
         if (dataList.length === 0) {
@@ -729,7 +742,7 @@
         const baseUrl = window.location.origin + window.location.pathname;
         const actualShareUrl = `${baseUrl}?list=${currentListId}`;
 
-        let teksWA = `*${judulFix.toUpperCase()}*\n\n`;
+        let teksWA = `📌 *${judulFix}*:\n\n`;
         dataList.forEach((item, index) => {
             teksWA += `${index + 1}. ${item.text}\n`;
         });
@@ -823,7 +836,6 @@
         modalTitle.innerText = mode === 'signin' ? 'Masuk ke Akun' : 'Daftar Akun Baru';
         btnConfirm.innerText = mode === 'signin' ? 'Sign In' : 'Sign Up';
 
-        // Atribut autocomplete dan name acak mencegah browser memicu simpan sandi/autofill
         modalBody.innerHTML = `
             <input type="text" id="authUsername" class="modal-input" placeholder="Username / No. WA" autocomplete="new-password" name="rand_user_${Math.random()}">
             <input type="password" id="authPassword" class="modal-input" placeholder="Password" autocomplete="new-password" name="rand_pass_${Math.random()}">
